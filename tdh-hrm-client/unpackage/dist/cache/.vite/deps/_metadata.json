@@ -1,0 +1,15 @@
+{
+  "hash": "79393791",
+  "configHash": "375d4d34",
+  "lockfileHash": "6e3ade1e",
+  "browserHash": "6afb6f8b",
+  "optimized": {
+    "pinyin-pro": {
+      "src": "../../../../../node_modules/pinyin-pro/dist/index.mjs",
+      "file": "pinyin-pro.js",
+      "fileHash": "5a2bda8b",
+      "needsInterop": false
+    }
+  },
+  "chunks": {}
+}
