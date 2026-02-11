@@ -1,0 +1,265 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"companyName": {
+			"bsonType": "string",
+			"title": "企业名称",
+			"description": "企业全称"
+		},
+		"industry": {
+			"bsonType": "string",
+			"title": "所属行业",
+			"description": "企业所属行业"
+		},
+		"establishmentDate": {
+			"bsonType": "timestamp",
+			"title": "成立时间",
+			"description": "公司成立日期"
+		},
+		"registeredCapital": {
+			"bsonType": "number",
+			"title": "注册资本",
+			"description": "注册资本金额（万元）"
+		},
+		"paidInCapital": {
+			"bsonType": "number",
+			"title": "实收资本",
+			"description": "实收资本金额（万元）"
+		},
+		"companyAddress": {
+			"bsonType": "string",
+			"title": "公司地址",
+			"description": "公司注册地址"
+		},
+		"contactName": {
+			"bsonType": "string",
+			"title": "对接人姓名",
+			"description": "对接联系人姓名"
+		},
+		"contactPhone": {
+			"bsonType": "string",
+			"title": "对接人电话",
+			"description": "对接联系人电话"
+		},
+		"contactPosition": {
+			"bsonType": "string",
+			"title": "对接人职务",
+			"description": "对接联系人职务"
+		},
+		"taxpayerType": {
+			"bsonType": "array",
+			"title": "纳税人类型",
+			"description": "多选类型",
+			"items": {
+				"bsonType": "string",
+				"enum": ["一般纳税人", "小微企业", "个体户", "其它"]
+			}
+		},
+		"enterpriseNature": {
+			"bsonType": "array",
+			"title": "企业性质",
+			"description": "多选类型",
+			"items": {
+				"bsonType": "string",
+				"enum": ["内资企业", "台资企业", "港资企业", "中外合资", "外资企业", "其它列明"]
+			}
+		},
+		"listingType": {
+			"bsonType": "string",
+			"title": "上市类型",
+			"description": "上市情况",
+			"enum": ["国内主板上市公司", "港板", "新三板", "其它列明", "未上市"]
+		},
+		"listingBoard": {
+			"bsonType": "string",
+			"title": "上市板块",
+			"description": "上市板块名称"
+		},
+		"enterpriseQualifications": {
+			"bsonType": "array",
+			"title": "企业资质",
+			"description": "多选类型",
+			"items": {
+				"bsonType": "string",
+				"enum": ["国高认证", "专精新认证", "科小认证", "特殊资质列明"]
+			}
+		},
+		"basicAccountBank": {
+			"bsonType": "string",
+			"title": "基本户银行",
+			"description": "基本户开户银行"
+		},
+		"employeeCount": {
+			"bsonType": "int",
+			"title": "员工总数",
+			"description": "公司员工总人数"
+		},
+		"monthlyPayroll": {
+			"bsonType": "number",
+			"title": "月代发工资额",
+			"description": "每月代发工资总额（万元）"
+		},
+		"seniorCertified": {
+			"bsonType": "int",
+			"title": "高级认证人数",
+			"description": "高级认证员工人数"
+		},
+		"intermediateCertified": {
+			"bsonType": "int",
+			"title": "中级认证人数",
+			"description": "中级认证员工人数"
+		},
+		"masterDegree": {
+			"bsonType": "int",
+			"title": "硕士人数",
+			"description": "硕士学历员工人数"
+		},
+		"doctorDegree": {
+			"bsonType": "int",
+			"title": "博士及以上人数",
+			"description": "博士及以上学历员工人数"
+		},
+		"legalRepresentative": {
+			"bsonType": "string",
+			"title": "法人",
+			"description": "公司法定代表人"
+		},
+		"actualController": {
+			"bsonType": "string",
+			"title": "实际控制人",
+			"description": "公司实际控制人"
+		},
+		"generalManager": {
+			"bsonType": "string",
+			"title": "总经理",
+			"description": "公司总经理"
+		},
+		"coreStaff": {
+			"bsonType": "array",
+			"title": "核心人员",
+			"description": "公司核心人员名单",
+			"items": {
+				"bsonType": "string"
+			}
+		},
+		"companyIntroduction": {
+			"bsonType": "string",
+			"title": "公司介绍",
+			"description": "公司基本情况介绍"
+		},
+		"shareholders": {
+			"bsonType": "array",
+			"title": "股东情况",
+			"description": "股东信息列表",
+			"items": {
+				"bsonType": "object",
+				"properties": {
+					"shareholderName": {
+						"bsonType": "string",
+						"title": "股东名称"
+					},
+					"committedCapital": {
+						"bsonType": "number",
+						"title": "应出资金额（万元）"
+					},
+					"actualCapital": {
+						"bsonType": "number",
+						"title": "实际出资金额（万元）"
+					},
+					"shareholdingRatio": {
+						"bsonType": "number",
+						"title": "持股比例（%）"
+					}
+				}
+			}
+		},
+		"companyHolding": {
+			"bsonType": "string",
+			"title": "公司持股股东之间关系",
+			"description": "股东间关系描述"
+		},
+		"controllerShareholding": {
+			"bsonType": "number",
+			"title": "实控人持股比例",
+			"description": "实际控制人持股比例（百分比）"
+		},
+		"softwareCopyrights": {
+			"bsonType": "int",
+			"title": "软件著作权",
+			"description": "软件著作权数量"
+		},
+		"trademarksTotal": {
+			"bsonType": "int",
+			"title": "商标总数",
+			"description": "商标总数量"
+		},
+		"trademarksBrandCount": {
+			"bsonType": "int",
+			"title": "其中品牌数",
+			"description": "品牌商标数量"
+		},
+		"specialTechnologies": {
+			"bsonType": "string",
+			"title": "专项技术",
+			"description": "专项技术介绍"
+		},
+		"inventionAuthorized": {
+			"bsonType": "int",
+			"title": "发明授权",
+			"description": "发明授权专利数量"
+		},
+		"utilityModel": {
+			"bsonType": "int",
+			"title": "实用新型",
+			"description": "实用新型专利数量"
+		},
+		"appearanceDesign": {
+			"bsonType": "int",
+			"title": "外观设计",
+			"description": "外观设计专利数量"
+		},
+		"inventionPublished": {
+			"bsonType": "int",
+			"title": "发明公布",
+			"description": "发明公布专利数量"
+		},
+		"rdPersonnelCount": {
+			"bsonType": "int",
+			"title": "研发人数",
+			"description": "研发人员数量"
+		},
+		"rdInvestment": {
+			"bsonType": "string",
+			"title": "研发投入介绍",
+			"description": "研发投入情况介绍"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

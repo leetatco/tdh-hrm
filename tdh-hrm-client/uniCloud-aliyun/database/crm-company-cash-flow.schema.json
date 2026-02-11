@@ -1,0 +1,78 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"bank_name": {
+			"bsonType": "string",
+			"title": "银行名称",
+			"description": "银行名称"
+		},
+		"half_year_total_flow": {
+			"bsonType": "number",
+			"title": "近半年总流水额",
+			"description": "近半年总流水额（万元）"
+		},
+		"water_fee_last_year": {
+			"bsonType": "number",
+			"title": "水费情况-近一年",
+			"description": "水费近一年情况"
+		},
+		"water_fee_last_month": {
+			"bsonType": "number",
+			"title": "水费情况-近一个月",
+			"description": "水费近一个月情况"
+		},
+		"electricity_fee_last_year": {
+			"bsonType": "number",
+			"title": "电费情况-近一年",
+			"description": "电费近一年情况"
+		},
+		"electricity_fee_last_month": {
+			"bsonType": "number",
+			"title": "电费情况-近一个月",
+			"description": "电费近一个月情况"
+		},
+		"rent_fee_last_year": {
+			"bsonType": "number",
+			"title": "租金情况-近一年",
+			"description": "租金近一年情况"
+		},
+		"rent_fee_last_month": {
+			"bsonType": "number",
+			"title": "租金情况-近一个月",
+			"description": "租金近一个月情况"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

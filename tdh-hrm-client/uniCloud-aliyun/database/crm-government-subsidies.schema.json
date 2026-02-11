@@ -1,0 +1,63 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"subsidy_time": {
+			"bsonType": "timestamp",
+			"title": "时间",
+			"description": "补贴发放时间或项目时间"
+		},
+		"project_name": {
+			"bsonType": "string",
+			"title": "项目名称",
+			"description": "政府补贴项目名称"
+		},
+		"subsidy_amount": {
+			"bsonType": "number",
+			"title": "补贴额",
+			"description": "补贴金额（万元）"
+		},
+		"subsidy_target": {
+			"bsonType": "string",
+			"title": "补贴对象",
+			"description": "补贴对象或用途"
+		},
+		"subsidy_introduction": {
+			"bsonType": "string",
+			"title": "补贴介绍",
+			"description": "补贴项目详细介绍"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

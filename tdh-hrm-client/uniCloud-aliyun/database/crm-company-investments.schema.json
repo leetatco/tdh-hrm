@@ -1,0 +1,84 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"is_holding": {
+			"bsonType": "bool",
+			"title": "是否控股",
+			"description": "是否控股投资"
+		},
+		"invested_company_name": {
+			"bsonType": "string",
+			"title": "企业名称",
+			"description": "被投资企业名称"
+		},
+		"registered_capital": {
+			"bsonType": "number",
+			"title": "注册资本",
+			"description": "被投资企业注册资本（万元）"
+		},
+		"paid_in_capital": {
+			"bsonType": "number",
+			"title": "实收资本",
+			"description": "被投资企业实收资本（万元）"
+		},
+		"main_business": {
+			"bsonType": "string",
+			"title": "主营业务",
+			"description": "被投资企业主营业务"
+		},
+		"investment_ratio": {
+			"bsonType": "number",
+			"title": "投资比例",
+			"description": "投资持股比例（%）"
+		},
+		"is_shell_company": {
+			"bsonType": "bool",
+			"title": "是否空壳",
+			"description": "是否为空壳公司"
+		},
+		"profit_introduction": {
+			"bsonType": "string",
+			"title": "营利介绍",
+			"description": "营利情况介绍"
+		},
+		"investment_type": {
+			"bsonType": "string",
+			"title": "投资类型",
+			"description": "投资主体类型：公司投资或实控人及配偶投资",
+			"enum": ["公司投资", "实控人及配偶投资"]
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

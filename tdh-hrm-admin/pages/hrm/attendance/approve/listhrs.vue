@@ -1470,6 +1470,11 @@
 						const key = `${row.employee_id}_${attendance_ym_key}`;
 						const costData = allCostsMap.get(key) || {};
 
+						//月薪，实际天数>全勤天数，实际天数=全勤天数
+						if (vk.pubfn.isNotNull(row.work_days) && vk.pubfn.isNotNull(row.real_days)) {
+							row.real_days = row.real_days > row.work_days ? row.work_days : row.real_days
+						}
+
 						// 设置费用数据
 						row.share_cost = costData.share_cost || 0;
 						row.clothes_cost = costData.clothes_cost || 0;
@@ -1494,7 +1499,7 @@
 					return []
 				}
 			},
-						
+
 			// 计算费用（考虑特殊人员加班规则）
 			computeCostsWithSpecial(row, rules) {
 				const {

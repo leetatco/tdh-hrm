@@ -1,0 +1,113 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"year": {
+			"bsonType": "string",
+			"title": "年份",
+			"description": "经营情况所属年份"
+		},
+		"next_year_business_intro": {
+			"bsonType": "string",
+			"title": "预计下年度经营情况介绍",
+			"description": "预计下一年度经营情况介绍"
+		},
+		"fixed_asset_investment": {
+			"bsonType": "number",
+			"title": "固定资产投资",
+			"description": "固定资产投资额（万元）"
+		},
+		"current_year_business_intro": {
+			"bsonType": "string",
+			"title": "本年经营情况介绍",
+			"description": "本年经营情况介绍"
+		},
+		"top2_customer_revenue": {
+			"bsonType": "string",
+			"title": "前二大客户营业额",
+			"description": "前二大客户营业额"
+		},
+		"external_account": {
+			"bsonType": "string",
+			"title": "外账",
+			"description": "外账情况"
+		},
+		"internal_account": {
+			"bsonType": "string",
+			"title": "内账",
+			"description": "内账情况"
+		},
+		"operating_revenue": {
+			"bsonType": "number",
+			"title": "营业收入",
+			"description": "营业收入（万元）"
+		},
+		"net_profit": {
+			"bsonType": "number",
+			"title": "净利润",
+			"description": "净利润（万元）"
+		},
+		"new_financing_needs": {
+			"bsonType": "number",
+			"title": "新增融资需求",
+			"description": "新增融资需求金额（万元）"
+		},
+		"is_upstream_downstream": {
+			"bsonType": "bool",
+			"title": "是否上下游",
+			"description": "是否涉及上下游业务"
+		},
+		"investment_amount_ratio": {
+			"bsonType": "string",
+			"title": "投资额约占股权比介绍",
+			"description": "投资额约占股权比介绍"
+		},
+		"planned_investment": {
+			"bsonType": "number",
+			"title": "拟投入额",
+			"description": "拟投入金额（万元）"
+		},
+		"funding_source_intro": {
+			"bsonType": "string",
+			"title": "资金来源介绍",
+			"description": "资金来源介绍"
+		},
+		"business_introduction": {
+			"bsonType": "string",
+			"title": "企业经营介绍",
+			"description": "该年份企业经营情况介绍"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}
