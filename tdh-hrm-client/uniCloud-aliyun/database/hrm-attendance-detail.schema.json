@@ -1,6 +1,7 @@
 {
 	"bsonType": "object",
-	"required": ["attendance_ym", "employee_id", "card", "work_days", "real_days", "overtime_hours", "earlytime_hours",
+	"required": ["attendance_ym", "employee_name", "card", "work_days", "real_days", "overtime_hours",
+		"earlytime_hours",
 		"missed_count"
 	],
 	"permission": {
@@ -25,11 +26,42 @@
 			"foreignKey": "hrm-employees.employee_id",
 			"trim": "both"
 		},
+		"employee_name": {
+			"title": "员工姓名",
+			"bsonType": "string",
+			"description": "员工姓名",
+			"trim": "both"
+		},
+		"department_name": {
+			"title": "部门名称",
+			"bsonType": "string",
+			"description": "部门名称",
+			"trim": "both"
+		},
 		"card": {
 			"title": "身份证号码",
 			"bsonType": "string",
 			"description": "身份证号码唯一标识，不可修改，不允许重复",
 			"trim": "both"
+		},
+		"position_name": {
+			"title": "职位名称",
+			"bsonType": "string",
+			"description": "职位名称",
+			"trim": "both"
+		},
+		"hire_date": {
+			"title": "入职日期",
+			"bsonType": "timestamp",
+			"description": "入职日期",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"resign_date": {
+			"title": "离职日期",
+			"bsonType": "string",
+			"description": "离职日期"
 		},
 		"resign_month": {
 			"title": "离职月份",
@@ -43,12 +75,12 @@
 		},
 		"real_days": {
 			"title": "实际天数",
-			"bsonType": "int",
+			"bsonType": "string",
 			"description": "实际天数"
 		},
 		"overtime_hours": {
 			"title": "加班小时",
-			"bsonType": "number",
+			"bsonType": "string",
 			"description": "加班小时"
 		},
 		"earlytime_hours": {
@@ -60,6 +92,21 @@
 			"title": "未打卡(次)",
 			"bsonType": "int",
 			"description": "未打卡(次)"
+		},
+		"typhoon_duty": {
+			"title": "台风",
+			"bsonType": "string",
+			"description": "台风"
+		},
+		"spring_festival_duty": {
+			"title": "留年",
+			"bsonType": "string",
+			"description": "留年"
+		},
+		"user_confirmed": {
+			"title": "本人确认",
+			"bsonType": "string",
+			"description": "本人确认"
 		},
 		"marriage_leave": {
 			"title": "婚假",

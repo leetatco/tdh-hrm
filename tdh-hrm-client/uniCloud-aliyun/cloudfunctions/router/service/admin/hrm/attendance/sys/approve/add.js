@@ -41,6 +41,15 @@ module.exports = {
 			agency_fee,
 			other_cost,
 			employee_id,
+			card,
+			employee_name,
+			department_name,
+			position_name,
+			hire_date,
+			resign_date,
+			typhoon_duty,
+			spring_festival_duty,
+			user_confirmed,
 			resign_month,
 			work_days,
 			real_days,
@@ -68,8 +77,9 @@ module.exports = {
 		let checkRes = await vk.baseDao.findByWhereJson({
 			dbName,
 			whereJson: {
-				attendance_ym_key,
-				employee_id
+				attendance_ym,
+				department_name,
+				card
 			}
 		});
 		if (checkRes) {
@@ -93,6 +103,15 @@ module.exports = {
 				agency_fee,
 				other_cost,
 				employee_id,
+				card,
+				employee_name,
+				department_name,
+				position_name,
+				hire_date,
+				resign_date,
+				typhoon_duty,
+				spring_festival_duty,
+				user_confirmed,
 				resign_month,
 				work_days,
 				real_days,

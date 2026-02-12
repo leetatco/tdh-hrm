@@ -59,41 +59,6 @@ module.exports = {
 			}],
 			// 副表
 			foreignDB: [{
-				dbName: "hrm-employees",
-				localKey: "employee_id",
-				foreignKey: "employee_id",
-				as: "employees",
-				limit: 1,
-				foreignDB: [{
-						dbName: "hrm-positions",
-						localKey: "position_id",
-						foreignKey: "position_id",
-						as: "positions",
-						limit: 1
-					},
-					{
-						dbName: "hrm-resigntypes",
-						localKey: "type_id",
-						foreignKey: "type_id",
-						as: "resigntypes",
-						limit: 1
-					},
-					{
-						dbName: "hrm-companys",
-						localKey: "company_id",
-						foreignKey: "company_id",
-						as: "companys",
-						limit: 1
-					},
-					{
-						dbName: "hrm-departments",
-						localKey: "department_id",
-						foreignKey: "department_id",
-						as: "departments",
-						limit: 1
-					}
-				],
-			}, {
 				dbName: "uni-id-users",
 				localKey: "update_id",
 				foreignKey: "_id",

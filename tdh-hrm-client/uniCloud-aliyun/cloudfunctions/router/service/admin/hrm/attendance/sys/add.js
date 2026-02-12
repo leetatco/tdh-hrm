@@ -33,6 +33,14 @@ module.exports = {
 		let {
 			attendance_ym,
 			employee_id,
+			employee_name,
+			department_name,
+			position_name,
+			hire_date,
+			resign_date,
+			typhoon_duty,
+			spring_festival_duty,
+			user_confirmed,
 			resign_month,
 			work_days,
 			real_days,
@@ -56,8 +64,8 @@ module.exports = {
 			dbName,
 			whereJson: {
 				attendance_ym,
-				employee_id,
-				resign_month
+				department_name,
+				card
 			}
 		});
 		if (checkRes) {
@@ -74,6 +82,14 @@ module.exports = {
 			dataJson: {
 				attendance_ym,
 				employee_id,
+				employee_name,
+				department_name,
+				position_name,
+				hire_date,
+				resign_date,
+				typhoon_duty,
+				spring_festival_duty,
+				user_confirmed,
 				resign_month,
 				work_days,
 				real_days,

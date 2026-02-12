@@ -96,49 +96,33 @@
 							width: colWidth - 100
 						},
 						{
-							"key": "employees.employee_id",
-							"title": "员工工号",
-							"type": "text",
-							fixed: true,
-							"width": colWidth - 100
-						},
-						{
-							"key": "employees.employee_name",
+							"key": "employee_name",
 							"title": "员工姓名",
 							"type": "text",
 							fixed: true,
 							"width": colWidth - 100
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text",
 							"sortable": true,
 							"width": colWidth - 30
 						},
 						{
-							"key": "employees.departments.department_name",
+							"key": "department_name",
 							"title": "部门",
 							"type": "text",
-							"width": colWidth - 100,
-							formatter: function(val, row, column, index) {
-								if (vk.pubfn.isNotNull(row.resign_month)) {
-									if (nowym.split('-')[1] != row.resign_month) {
-										// console.log("6666666666:",val,nowm1,nowym.split('-')[1]-row.resign_month)
-										return row.resign_month + val;
-									}
-								}
-								return val;
-							}
+							"width": colWidth - 50
 						},
 						{
-							"key": "employees.positions.position_name",
+							"key": "position_name",
 							"title": "职位",
 							"type": "text",
-							"width": colWidth - 100
+							"width": colWidth - 50
 						},
 						{
-							key: "employees.hire_date",
+							key: "hire_date",
 							title: "入职日期",
 							type: "date",
 							dateType: "date",
@@ -147,13 +131,10 @@
 							width: colWidth - 100
 						},
 						{
-							"key": "resign_month",
+							"key": "resign_date",
 							"title": "离职日期",
-							"type": "number",
-							"width": colWidth - 90,
-							formatter: function(val, row, column, index) {
-								return val ? val + '月离职工资' : '';
-							}
+							"type": "text",
+							"width": colWidth - 100
 						},
 						{
 							"key": "work_days",
@@ -164,7 +145,19 @@
 						{
 							"key": "real_days",
 							"title": "实际天数",
-							"type": "number",
+							"type": "text",
+							"width": colWidth - 100
+						},
+						{
+							"key": "typhoon_duty",
+							"title": "台风",
+							"type": "text",
+							"width": colWidth - 100
+						},
+						{
+							"key": "spring_festival_duty",
+							"title": "留年",
+							"type": "text",
 							"width": colWidth - 100
 						},
 						{
@@ -186,51 +179,9 @@
 							"width": colWidth - 100
 						},
 						{
-							"key": "marriage_leave",
-							"title": "婚假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "maternity_leave",
-							"title": "产假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "paternity_leave",
-							"title": "陪产假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "sick_leave",
-							"title": "病假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "emergency_leave",
-							"title": "丧假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "work_injury",
-							"title": "工伤",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "allowance",
-							"title": "补助",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "attendance_correction",
-							"title": "补考勤",
-							"type": "number",
+							"key": "user_confirmed",
+							"title": "本人确认",
+							"type": "text",
 							"width": colWidth - 100
 						},
 						{
@@ -277,19 +228,13 @@
 							format: "yyyy-MM"
 						},
 						{
-							key: "employee_id",
+							key: "card",
 							title: "",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -299,17 +244,11 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
-							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: 150,
-									mode: "%%"
-								},
+							queryColumns: [
 								{
 									key: "employee_name",
 									title: "员工姓名",
@@ -329,8 +268,8 @@
 						},
 						//{"key":"real_days","title":"实际天数","type":"number","width":200,"mode":"="},
 						//{"key":"overtime_hours","title":"加班小时","type":"text","width":200,"mode":"="},
-						//{"key":"earlytime_hours","title":"迟/早退(分)","type":"number","width":200,"mode":"="},
-						//{"key":"missed_count","title":"未打卡(次)","type":"number","width":200,"mode":"="},
+						//{"key":"earlytime_hours","title":"迟/早退（分）","type":"number","width":200,"mode":"="},
+						//{"key":"missed_count","title":"未打卡（次）","type":"number","width":200,"mode":"="},
 						// {
 						// 	"key": "enable_hr",
 						// 	"title": "人事审核",
@@ -372,8 +311,8 @@
 								"width": colWidth
 
 							}, {
-								"key": "employee_id",
-								"title": "员工工号",
+								"key": "employee_name",
+								"title": "员工姓名",
 								"type": "text",
 								"width": colWidth
 							},
@@ -398,13 +337,13 @@
 							},
 							{
 								"key": "earlytime_hours",
-								"title": "迟/早退(分)",
+								"title": "迟/早退（分）",
 								"type": "number",
 								"width": colWidth
 							},
 							{
 								"key": "missed_count",
-								"title": "未打卡(次)",
+								"title": "未打卡（次）",
 								"type": "number",
 								"width": colWidth
 							},
@@ -435,7 +374,7 @@
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
 							}],
-							employee_id: [{
+							employee_name: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
@@ -565,26 +504,45 @@
 						"title": "考勤日期",
 						"type": "text"
 					},
-					employee_id: {
-						"title": "员工工号",
+					employee_name: {
+						"title": "姓名",
 						"type": "text"
 					},
 					card: {
 						"title": "身份证号码",
 						"type": "text"
 					},
-					resign_month: {
-						"title": "离职月份",
+					department_name: {
+						"title": "部门",
+						"type": "text"
+					},
+					position_name: {
+						"title": "岗位",
+						"type": "text"
+					},
+					hire_date: {
+						"title": "入职日期",
 						"type": "number"
+					},
+					resign_date: {
+						"title": "离职日期",
+						"type": "text"
 					},
 					work_days: {
 						"title": "全勤天数",
 						"type": "number"
 					},
 					real_days: {
-						"title": "实际天数",
-						"precision": 2,
-						"type": "number"
+						"title": "上班天数",
+						"type": "text"
+					},
+					typhoon_duty: {
+						"title": "台风",
+						"type": "text"
+					},
+					spring_festival_duty: {
+						"title": "留年",
+						"type": "text"
 					},
 					overtime_hours: {
 						"title": "加班小时",
@@ -592,44 +550,16 @@
 						"type": "number"
 					},
 					earlytime_hours: {
-						"title": "迟/早退(分)",
+						"title": "迟/早退（分）",
 						"type": "number"
 					},
 					missed_count: {
-						"title": "未打卡(次)",
+						"title": "未打卡（次）",
 						"type": "number"
 					},
-					marriage_leave: {
-						"title": "婚假",
-						"type": "number"
-					},
-					maternity_leave: {
-						"title": "产假",
-						"type": "number"
-					},
-					paternity_leave: {
-						"title": "陪产假",
-						"type": "number"
-					},
-					sick_leave: {
-						"title": "病假",
-						"type": "number"
-					},
-					emergency_leave: {
-						"title": "丧假",
-						"type": "number"
-					},
-					work_injury: {
-						"title": "工伤",
-						"type": "number"
-					},
-					allowance: {
-						"title": "补助",
-						"type": "number"
-					},
-					attendance_correction: {
-						"title": "补考勤",
-						"type": "number"
+					user_confirmed: {
+						"title": "本人确认",
+						"type": "text"
 					},
 					comment: {
 						"title": "备注",
@@ -669,35 +599,38 @@
 						}
 
 						// 3. 批量检查人员基本资料
-						vk.toast('检查人员基本资料中...');
-						const checkRes = await vk.callFunction({
-							url: 'admin/hrm/employees/pub/getCheckCards',
-							title: '检查人员资料...',
-							data: {
-								cards: cards
-							}
-						});
+						// vk.toast('检查人员基本资料中...');
+						// const checkRes = await vk.callFunction({
+						// 	url: 'admin/hrm/employees/pub/getCheckCards',
+						// 	title: '检查人员资料...',
+						// 	data: {
+						// 		cards: cards
+						// 	}
+						// });
 
-						if (checkRes.cardeds && checkRes.cardeds.length > 0) {
-							const errorCards = checkRes.cardeds.slice(0, 10).join(', ');
-							const errorMsg = checkRes.cardeds.length > 10 ?
-								`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}...等` :
-								`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}`;
-							return vk.alert(errorMsg, "检测Excel导入数据", "确定");
-						}
+						// if (checkRes.cardeds && checkRes.cardeds.length > 0) {
+						// 	const errorCards = checkRes.cardeds.slice(0, 10).join(', ');
+						// 	const errorMsg = checkRes.cardeds.length > 10 ?
+						// 		`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}...等` :
+						// 		`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}`;
+						// 	return vk.alert(errorMsg, "检测Excel导入数据", "确定");
+						// }
 
 						// 4. 批量获取员工信息映射
-						vk.toast('获取员工信息中...');
-						const employeeMap = await vk.myfn.batchGetEmployeeInfo(cards);
-						if (!employeeMap) {
-							return vk.alert('获取员工信息失败！');
-						}
+						// vk.toast('获取员工信息中...');
+						// const employeeMap = await vk.myfn.batchGetEmployeeInfo(cards);
+						// if (!employeeMap) {
+						// 	return vk.alert('获取员工信息失败！');
+						// }
 
 						// 5. 准备要处理的数据
 						const validData = [];
 						const errorData = [];
 
 						for (const item of res) {
+
+							item.attendance_ym = nowym
+
 							// 验证必要字段
 							if (!item.attendance_ym) {
 								errorData.push({
@@ -715,21 +648,25 @@
 							}
 
 							// 获取employee_id
-							const employeeInfo = employeeMap.get(item.card);
-							if (!employeeInfo) {
-								errorData.push({
-									item,
-									reason: '未找到对应的员工信息'
-								});
-								continue;
-							}
+							// const employeeInfo = employeeMap.get(item.card);
+							// if (!employeeInfo) {
+							// 	errorData.push({
+							// 		item,
+							// 		reason: '未找到对应的员工信息'
+							// 	});
+							// 	continue;
+							// }
 
 							//修改新增人员和时间									
 							item.update_date = new Date().getTime();
 							item.update_id = vk.getVuex('$user.userInfo._id');
 
-							item.employee_id = employeeInfo.employee_id;
-							item.attendance_ym = this.formatAttendanceYm(item.attendance_ym);
+							// item.employee_id = employeeInfo.employee_id;
+							// item.attendance_ym = this.formatAttendanceYm(item.attendance_ym);							
+
+							let utcDate = new Date(Date.UTC(1900, 0, item.hire_date - 1));
+							item.hire_date = utcDate.toISOString().slice(0, 10);
+
 							validData.push(item);
 						}
 
@@ -805,7 +742,7 @@
 					valid: true,
 					message: ''
 				};
-			},			
+			},
 
 			// 按考勤日期分组数据
 			groupDataByAttendanceYm(data) {
@@ -846,7 +783,7 @@
 
 				return attendanceYm;
 			},
-			
+
 			// 导入xls表格文件模版
 			exportExcelModel() {
 				this.$refs.table1.exportExcel({
@@ -858,14 +795,34 @@
 							"type": "text"
 						},
 						{
-							"key": "employees.card",
+							"key": "employee_name",
+							"title": "姓名",
+							"type": "text"
+						},
+						{
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text"
 						},
 						{
-							"key": "resign_month",
-							"title": "离职月份",
+							"key": "department_name",
+							"title": "身份证号码",
+							"type": "text"
+						},
+						{
+							"key": "position_name",
+							"title": "岗位",
+							"type": "text"
+						},
+						{
+							"key": "hire_date",
+							"title": "入职日期",
 							"type": "number"
+						},
+						{
+							"key": "resign_date",
+							"title": "离职日期",
+							"type": "text"
 						},
 						{
 							"key": "work_days",
@@ -875,7 +832,17 @@
 						{
 							"key": "real_days",
 							"title": "实际天数",
-							"type": "number"
+							"type": "text"
+						},
+						{
+							"key": "typhoon_duty",
+							"title": "台风",
+							"type": "text"
+						},
+						{
+							"key": "spring_festival_duty",
+							"title": "留年",
+							"type": "text"
 						},
 						{
 							"key": "overtime_hours",
@@ -885,52 +852,17 @@
 						},
 						{
 							"key": "earlytime_hours",
-							"title": "迟/早退(分)",
+							"title": "迟/早退（分）",
 							"type": "number"
 						},
 						{
 							"key": "missed_count",
-							"title": "未打卡(次)",
+							"title": "未打卡（次）",
 							"type": "number"
 						},
 						{
-							"key": "marriage_leave",
-							"title": "婚假",
-							"type": "number"
-						},
-						{
-							"key": "maternity_leave",
-							"title": "产假",
-							"type": "number"
-						},
-						{
-							"key": "paternity_leave",
-							"title": "陪产假",
-							"type": "number"
-						},
-						{
-							"key": "sick_leave",
-							"title": "病假",
-							"type": "number"
-						},
-						{
-							"key": "emergency_leave",
-							"title": "丧假",
-							"type": "number"
-						},
-						{
-							"key": "work_injury",
-							"title": "工伤",
-							"type": "number"
-						},
-						{
-							"key": "allowance",
-							"title": "补助",
-							"type": "number"
-						},
-						{
-							"key": "attendance_correction",
-							"title": "补考勤",
+							"key": "user_confirmed",
+							"title": "本人确认",
 							"type": "number"
 						},
 						{
@@ -957,40 +889,27 @@
 							"format": "yyyy-MM"
 						},
 						{
-							"key": "employee_id",
-							"title": "员工工号",
-							"type": "text"
-						},
-						{
-							"key": "employees.employee_name",
+							"key": "employee_name",
 							"title": "员工姓名",
 							"type": "text"
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text"
 						},
 						{
-							"key": "employees.departments.department_name",
+							"key": "department_name",
 							"title": "部门",
-							"type": "text",
-							formatter: function(val, row, column, index) {
-								if (vk.pubfn.isNotNull(row.resign_month)) {
-									if (nowym.split('-')[1] != row.resign_month) {
-										return row.resign_month + val;
-									}
-								}
-								return val;
-							}
+							"type": "text"
 						},
 						{
-							"key": "employees.positions.position_name",
+							"key": "position_name",
 							"title": "职位",
 							"type": "text"
 						},
 						{
-							"key": "employees.hire_date",
+							"key": "hire_date",
 							"title": "入职日期",
 							"type": "date",
 							"dateType": "date",
@@ -998,17 +917,24 @@
 							"format": "yyyy-MM-dd"
 						},
 						{
-							"key": "resign_month",
-							"title": "离职月份",
-							"type": "number",
-							formatter: function(val, row, column, index) {
-								return val ? val + '月离职工资' : '';
-							}
+							"key": "resign_date",
+							"title": "离职日期",
+							"type": "text"
 						},
 						{
 							"key": "work_days",
 							"title": "全勤天数",
 							"type": "number"
+						},
+						{
+							"key": "typhoon_duty",
+							"title": "台风",
+							"type": "text"
+						},
+						{
+							"key": "spring_festival_duty",
+							"title": "留年",
+							"type": "text"
 						},
 						{
 							"key": "real_days",
@@ -1023,52 +949,17 @@
 						},
 						{
 							"key": "earlytime_hours",
-							"title": "迟/早退(分)",
+							"title": "迟/早退（分）",
 							"type": "number"
 						},
 						{
 							"key": "missed_count",
-							"title": "未打卡(次)",
+							"title": "未打卡（次）",
 							"type": "number"
 						},
 						{
-							"key": "marriage_leave",
-							"title": "婚假",
-							"type": "number"
-						},
-						{
-							"key": "maternity_leave",
-							"title": "产假",
-							"type": "number"
-						},
-						{
-							"key": "paternity_leave",
-							"title": "陪产假",
-							"type": "number"
-						},
-						{
-							"key": "sick_leave",
-							"title": "病假",
-							"type": "number"
-						},
-						{
-							"key": "emergency_leave",
-							"title": "丧假",
-							"type": "number"
-						},
-						{
-							"key": "work_injury",
-							"title": "工伤",
-							"type": "number"
-						},
-						{
-							"key": "allowance",
-							"title": "补助",
-							"type": "number"
-						},
-						{
-							"key": "attendance_correction",
-							"title": "补考勤",
+							"key": "user_confirmed",
+							"title": "本人确认",
 							"type": "number"
 						},
 						{

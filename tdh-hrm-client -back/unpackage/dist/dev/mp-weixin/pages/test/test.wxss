@@ -1,0 +1,13 @@
+.app.data-v-727d09f0 {
+  padding: 15px;
+}
+.app input.data-v-727d09f0 {
+  height: 46px;
+  border: solid 1px #DDDDDD;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 0px 15px;
+}
+.app button.data-v-727d09f0 {
+  margin-bottom: 15px;
+}

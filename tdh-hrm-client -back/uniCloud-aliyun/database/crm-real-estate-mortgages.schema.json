@@ -1,0 +1,120 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"owner_type": {
+			"bsonType": "string",
+			"title": "所有权人类型",
+			"description": "房产所有权人类型",
+			"enum": ["公司房", "实控人及配偶房产", "关联人员房产"]
+		},
+		"mortgage_guarantee_intro": {
+			"bsonType": "string",
+			"title": "抵押、担保介绍",
+			"description": "抵押担保情况介绍"
+		},
+		"mortgage_loan_intro": {
+			"bsonType": "string",
+			"title": "按揭介绍",
+			"description": "按揭贷款情况介绍"
+		},
+		"property_type": {
+			"bsonType": "string",
+			"title": "房产性质",
+			"description": "房产类型",
+			"enum": ["厂房", "商铺", "公寓", "写字楼", "住宅", "自建房"]
+		},
+		"location": {
+			"bsonType": "string",
+			"title": "位置",
+			"description": "房产地理位置"
+		},
+		"area": {
+			"bsonType": "number",
+			"title": "面积",
+			"description": "房产面积（平方米）"
+		},
+		"first_mortgage_balance": {
+			"bsonType": "number",
+			"title": "一押贷款余额",
+			"description": "一押未结清金额（万元）"
+		},
+		"first_mortgage_rate": {
+			"bsonType": "number",
+			"title": "一押年化利率",
+			"description": "一押年化利率（%）"
+		},
+		"first_mortgage_remaining_periods": {
+			"bsonType": "int",
+			"title": "一押尚余期数",
+			"description": "一押剩余还款期数"
+		},
+		"first_mortgage_due_date": {
+			"bsonType": "timestamp",
+			"title": "一押到期日",
+			"description": "一押贷款到期日"
+		},
+		"second_mortgage_balance": {
+			"bsonType": "number",
+			"title": "二押贷款余额",
+			"description": "二押未结清金额（万元）"
+		},
+		"second_mortgage_rate": {
+			"bsonType": "number",
+			"title": "二押年化利率",
+			"description": "二押年化利率（%）"
+		},
+		"second_mortgage_due_date": {
+			"bsonType": "timestamp",
+			"title": "二押到期日",
+			"description": "二押贷款到期日"
+		},
+		"appraisal_value": {
+			"bsonType": "number",
+			"title": "房产评估价",
+			"description": "房产评估价值（万元）"
+		},
+		"current_status": {
+			"bsonType": "string",
+			"title": "目前情况",
+			"description": "房产当前状态描述"
+		},
+		"notes": {
+			"bsonType": "string",
+			"title": "备注",
+			"description": "其他备注信息"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

@@ -10,8 +10,8 @@
 		<!-- 自定义按钮区域开始 -->
 		<view>
 			<el-row>
-				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
-					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')" @click="addBtn">添加</el-button>
+				<!-- <el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')" @click="addBtn">添加</el-button> -->
 				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')"
 					@click="autoBtn">自动生成月考勤表</el-button>
@@ -47,81 +47,6 @@
 			<vk-data-form v-model="form1.data" :rules="form1.props.rules" :action="form1.props.action"
 				:form-type="form1.props.formType" :columns='form1.props.columns' label-width="100px"
 				@success="form1.props.show = false;refresh();" :inline="true" :columnsNumber="2">
-				<template v-slot:share_cost="{form}">
-					<view>
-						<text>{{form.share_cost}}</text>
-					</view>
-				</template>
-				<template v-slot:clothes_cost="{form}">
-					<view>
-						<text>{{form.clothes_cost}}</text>
-					</view>
-				</template>
-				<template v-slot:reward_cost="{form}">
-					<view>
-						<text>{{form.reward_cost}}</text>
-					</view>
-				</template>
-				<template v-slot:punish_cost="{form}">
-					<view>
-						<text>{{form.punish_cost}}</text>
-					</view>
-				</template>
-				<!-- <template v-slot:grant="{form}">
-					<view>
-						<text>{{form.grant}}</text>
-					</view> 
-                </template>-->
-				<template v-slot:agency_fee="{form}">
-					<view>
-						<text>{{form.agency_fee}}</text>
-					</view>
-				</template>
-				<template v-slot:other_cost="{form}">
-					<view>
-						<text>{{form.other_cost}}</text>
-					</view>
-				</template>
-				<template v-slot:marriage_leave="{form}">
-					<view>
-						<text>{{form.marriage_leave}}</text>
-					</view>
-				</template>
-				<template v-slot:maternity_leave="{form}">
-					<view>
-						<text>{{form.maternity_leave}}</text>
-					</view>
-				</template>
-				<template v-slot:paternity_leave="{form}">
-					<view>
-						<text>{{form.paternity_leave}}</text>
-					</view>
-				</template>
-				<template v-slot:work_injury="{form}">
-					<view>
-						<text>{{form.work_injury}}</text>
-					</view>
-				</template>
-				<template v-slot:sick_leave="{form}">
-					<view>
-						<text>{{form.sick_leave}}</text>
-					</view>
-				</template>
-				<template v-slot:emergency_leave="{form}">
-					<view>
-						<text>{{form.emergency_leave}}</text>
-					</view>
-				</template>
-				<template v-slot:allowance="{form}">
-					<view>
-						<text>{{form.allowance}}</text>
-					</view>
-				</template>
-				<template v-slot:attendance_correction="{form}">
-					<view>
-						<text>{{form.attendance_correction}}</text>
-					</view>
-				</template>
 			</vk-data-form>
 		</vk-data-dialog>
 		<!-- 添加或编辑的弹窗结束 -->
@@ -198,49 +123,34 @@
 							"width": colWidth - 100
 						},
 						{
-							"key": "employee_id",
-							"title": "员工工号",
+							"key": "employee_name",
+							"title": "姓名",
 							"type": "text",
 							"fixed": true,
 							"width": colWidth - 100
 						},
 						{
-							"key": "employees.employee_name",
-							"title": "员工姓名",
-							"type": "text",
-							"fixed": true,
-							"width": colWidth - 100
-						},
-						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text",
 							"fixed": true,
 							"width": colWidth - 30
 						},
 						{
-							"key": "employees.departments.department_name",
+							"key": "department_name",
 							"title": "部门",
 							"type": "text",
 							"fixed": true,
-							"width": colWidth,
-							formatter: function(val, row, column, index) {
-								if (vk.pubfn.isNotNull(row.resign_month)) {
-									if (nowym.split('-')[1] != row.resign_month) {
-										return row.resign_month + val;
-									}
-								}
-								return val;
-							}
+							"width": colWidth
 						},
 						{
-							"key": "employees.positions.position_name",
+							"key": "position_name",
 							"title": "职位",
 							"type": "text",
 							"width": colWidth - 100
 						},
 						{
-							key: "employees.hire_date",
+							key: "hire_date",
 							title: "入职日期",
 							type: "date",
 							dateType: "date",
@@ -249,13 +159,10 @@
 							width: colWidth - 100
 						},
 						{
-							"key": "resign_month",
+							"key": "resign_date",
 							"title": "离职日期",
-							"type": "number",
-							"width": colWidth - 90,
-							formatter: function(val, row, column, index) {
-								return val ? val + '月离职工资' : '';
-							}
+							"type": "text",
+							"width": colWidth - 90
 						},
 						{
 							"key": "work_days",
@@ -270,14 +177,20 @@
 							"width": colWidth - 100
 						},
 						{
-							"key": "overtime_hours",
-							"title": "加班小时",
-							"type": "number",
+							"key": "typhoon_duty",
+							"title": "台风",
+							"type": "text",
 							"width": colWidth - 100
 						},
 						{
-							"key": "overtime_cost",
-							"title": "加班费",
+							"key": "spring_festival_duty",
+							"title": "留年",
+							"type": "text",
+							"width": colWidth - 100
+						},
+						{
+							"key": "overtime_hours",
+							"title": "加班小时",
 							"type": "number",
 							"width": colWidth - 100
 						},
@@ -306,93 +219,9 @@
 							"width": colWidth - 100
 						},
 						{
-							"key": "share_cost",
-							"title": "水电费用",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "clothes_cost",
-							"title": "工衣费用",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "reward_cost",
-							"title": "奖励",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "punish_cost",
-							"title": "惩罚",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						// {
-						// 	"key": "grant",
-						// 	"title": "补助金",
-						// 	"type": "number",
-						// 	"width": colWidth - 100
-						// },
-						{
-							"key": "agency_fee",
-							"title": "介绍费",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "other_cost",
-							"title": "其它费用",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "marriage_leave",
-							"title": "婚假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "maternity_leave",
-							"title": "产假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "paternity_leave",
-							"title": "陪产假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "sick_leave",
-							"title": "病假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "emergency_leave",
-							"title": "丧假",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "work_injury",
-							"title": "工伤",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "allowance",
-							"title": "补助",
-							"type": "number",
-							"width": colWidth - 100
-						},
-						{
-							"key": "attendance_correction",
-							"title": "补考勤",
-							"type": "number",
+							"key": "user_confirmed",
+							"title": "本人确认",
+							"type": "text",
 							"width": colWidth - 100
 						},
 						{
@@ -413,8 +242,9 @@
 									title: value ? "通过中..." : "未通过中...",
 									data: {
 										_id: row._id,
-										attendance_ym_key: row.attendance_ym_key,
-										employee_id: row.employee_id,
+										attendance_ym: row.attendance_ym,
+										card: row.card,
+										department_name: row.department_name,
 										enable_hr: value
 									},
 									success: data => {
@@ -484,19 +314,13 @@
 							}],
 							"mode": "="
 						}, {
-							key: "employee_id",
+							key: "card",
 							title: "",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -506,18 +330,11 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: 150,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -564,19 +381,13 @@
 								"width": colWidth
 
 							}, {
-								key: "employee_id",
+								key: "card",
 								title: "",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
 								multiple: false,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -586,18 +397,11 @@
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										nameKey: true
+										idKey: true
 
 									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: 150,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -615,9 +419,9 @@
 								]
 							},
 							{
-								key: "resign_month",
+								key: "resign_date",
 								title: "离职日期",
-								type: "number",
+								type: "text",
 								disabled: true,
 								width: colWidth
 							},
@@ -630,7 +434,7 @@
 							{
 								"key": "real_days",
 								"title": "实际天数",
-								"type": "number",
+								"type": "text",
 								"width": colWidth
 							},
 							{
@@ -638,14 +442,6 @@
 								"title": "加班小时",
 								"type": "number",
 								"precision": 1,
-								"width": colWidth
-							},
-							{
-								"key": "overtime_cost",
-								"title": "加班费",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
 								"width": colWidth
 							},
 							{
@@ -677,124 +473,6 @@
 								"disabled": true,
 								"precision": 0,
 								"width": colWidth
-							},
-							{
-								"key": "share_cost",
-								"title": "水电费用",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth
-							},
-							{
-								"key": "clothes_cost",
-								"title": "工衣费用",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth
-							},
-							{
-								"key": "reward_cost",
-								"title": "奖励",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth
-							},
-							{
-								"key": "punish_cost",
-								"title": "惩罚",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth
-							},
-							// {
-							// 	"key": "grant",
-							// 	"title": "补助金",
-							// 	"type": "number",
-							// 	"disabled": true,
-							// 	"precision": 0,
-							// 	"width": colWidth
-							// },
-							{
-								"key": "agency_fee",
-								"title": "介绍费",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							},
-							{
-								"key": "other_cost",
-								"title": "其它费用",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth
-							},
-							{
-								"key": "marriage_leave",
-								"title": "婚假",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							},
-							{
-								"key": "maternity_leave",
-								"title": "产假",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							},
-							{
-								"key": "paternity_leave",
-								"title": "陪产假",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							}, {
-								"key": "sick_leave",
-								"title": "病假",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							}, {
-								"key": "emergency_leave",
-								"title": "丧假",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							},
-							{
-								"key": "work_injury",
-								"title": "工伤",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							},
-							{
-								"key": "allowance",
-								"title": "补助",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
-							},
-							{
-								"key": "attendance_correction",
-								"title": "补考勤",
-								"type": "number",
-								"disabled": true,
-								"precision": 0,
-								"width": colWidth - 100
 							},
 							{
 								"key": "enable_hr",
@@ -909,40 +587,27 @@
 							"format": "yyyy-MM"
 						},
 						{
-							"key": "employee_id",
-							"title": "员工工号",
-							"type": "text"
-						},
-						{
-							"key": "employees.employee_name",
+							"key": "employee_name",
 							"title": "员工姓名",
 							"type": "text"
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text"
 						},
 						{
-							"key": "employees.departments.department_name",
+							"key": "department_name",
 							"title": "部门",
-							"type": "text",
-							formatter: function(val, row, column, index) {
-								if (vk.pubfn.isNotNull(row.resign_month)) {
-									if (nowym.split('-')[1] != row.resign_month) {
-										return row.resign_month + val;
-									}
-								}
-								return val;
-							}
+							"type": "text"
 						},
 						{
-							"key": "employees.positions.position_name",
+							"key": "position_name",
 							"title": "职位",
 							"type": "text"
 						},
 						{
-							"key": "employees.hire_date",
+							"key": "hire_date",
 							"title": "入职日期",
 							"type": "date",
 							"dateType": "date",
@@ -950,12 +615,9 @@
 							"format": "yyyy-MM-dd"
 						},
 						{
-							"key": "resign_month",
+							"key": "resign_date",
 							"title": "离职日期",
-							"type": "number",
-							formatter: function(val, row, column, index) {
-								return val ? val + '月离职工资' : '';
-							}
+							"type": "text"
 						},
 						{
 							"key": "work_days",
@@ -968,13 +630,18 @@
 							"type": "number"
 						},
 						{
-							"key": "overtime_hours",
-							"title": "加班小时",
-							"type": "number"
+							"key": "typhoon_duty",
+							"title": "台风",
+							"type": "text"
 						},
 						{
-							"key": "overtime_cost",
-							"title": "加班费",
+							"key": "spring_festival_duty",
+							"title": "留年",
+							"type": "text"
+						},
+						{
+							"key": "overtime_hours",
+							"title": "加班小时",
 							"type": "number"
 						},
 						{
@@ -998,78 +665,8 @@
 							"type": "number"
 						},
 						{
-							"key": "share_cost",
-							"title": "水电费用",
-							"type": "number"
-						},
-						{
-							"key": "clothes_cost",
-							"title": "工衣费用",
-							"type": "number"
-						},
-						{
-							"key": "reward_cost",
-							"title": "奖励",
-							"type": "number"
-						},
-						{
-							"key": "punish_cost",
-							"title": "惩罚",
-							"type": "number"
-						},
-						// {
-						// 	"key": "grant",
-						// 	"title": "补助金",
-						// 	"type": "number"
-						// },
-						{
-							"key": "agency_fee",
-							"title": "介绍费",
-							"type": "number",
-						},
-						{
-							"key": "other_cost",
-							"title": "其它费用",
-							"type": "number"
-						},
-						{
-							"key": "marriage_leave",
-							"title": "婚假",
-							"type": "number"
-						},
-						{
-							"key": "maternity_leave",
-							"title": "产假",
-							"type": "number"
-						},
-						{
-							"key": "paternity_leave",
-							"title": "陪产假",
-							"type": "number"
-						},
-						{
-							"key": "sick_leave",
-							"title": "病假",
-							"type": "number"
-						},
-						{
-							"key": "emergency_leave",
-							"title": "丧假",
-							"type": "number"
-						},
-						{
-							"key": "work_injury",
-							"title": "工伤",
-							"type": "number"
-						},
-						{
-							"key": "allowance",
-							"title": "补助",
-							"type": "number"
-						},
-						{
-							"key": "attendance_correction",
-							"title": "补考勤",
+							"key": "user_confirmed",
+							"title": "本人确认",
 							"type": "number"
 						},
 						{
@@ -1084,7 +681,7 @@
 							"key": "comment",
 							"title": "备注",
 							"type": "text"
-						},
+						}
 					],
 					pageIndex: 1,
 					pageSize: -1, // 此值为-1，代表导出所有数据
@@ -1143,30 +740,34 @@
 				if (ll_data.total == 0) return vk.alert('请设定迟/早退打卡规则！');
 				if (com_data.total == 0) return vk.alert('请设通用加班规则！');
 
-				let employee_id = this.form1.data.employee_id || 0;
+				// let employee_id = this.form1.data.employee_id || 0;
 				let overtime_hours = this.form1.data.overtime_hours || 0;
 				let earlytime_hours = this.form1.data.earlytime_hours || 0;
 				let missed_count = this.form1.data.missed_count || 0;
 
-				if (employee_id == 0) return vk.alert('请选择员工！');
+				// if (employee_id == 0) return vk.alert('请选择员工！');
 
 				//加班费
 				if (overtime_hours !== 0) {
 					//特殊人员加班费用
-					let emp_data = await vk.callFunction({
-						url: 'admin/hrm/salary/sys/overtime/getList',
-						title: '请求中...',
-						data: {
-							employee_id
-						}
-					})
-					if (emp_data.total > 0) {
-						let value = overtime_hours * emp_data.rows[0].overtime_cost;
-						this.$set(this.form1.data, 'overtime_cost', value);
-					} else {
-						let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
-						this.$set(this.form1.data, 'overtime_cost', value);
-					}
+					// let emp_data = await vk.callFunction({
+					// 	url: 'admin/hrm/salary/sys/overtime/getList',
+					// 	title: '请求中...',
+					// 	data: {
+					// 		employee_id
+					// 	}
+					// })
+					// if (emp_data.total > 0) {
+					// 	let value = overtime_hours * emp_data.rows[0].overtime_cost;
+					// 	this.$set(this.form1.data, 'overtime_cost', value);
+					// } else {
+					// 	let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
+					// 	this.$set(this.form1.data, 'overtime_cost', value);
+					// }
+
+					let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
+					this.$set(this.form1.data, 'overtime_cost', value);
+
 				}
 
 				//迟到费
@@ -1216,42 +817,42 @@
 								return vk.alert(`${nowym}月考勤明细删除失败！`);
 							}
 
-							// 3. 提取所有员工ID和可能的attendance_ym_key
-							const employeeIds = [];
+							// 3. 提取所有员工card和可能的attendance_ym_key
+							const employeeCards = [];
 							const attendanceYmKeys = new Set();
 
 							for (let row of resDetails.rows) {
-								employeeIds.push(row.employee_id);
+								employeeCards.push(row.card);
 
 								// 计算attendance_ym_key
-								let attendance_ym_key;
-								if (vk.pubfn.isNotNull(row.resign_month)) {
-									if (nowym.split('-')[1] != row.resign_month) {
-										let rm = row.resign_month > 9 ? row.resign_month :
-											`0${row.resign_month}`;
-										attendance_ym_key = `${nowy}-${rm}`;
-									} else {
-										attendance_ym_key = row.attendance_ym;
-									}
-								} else {
-									attendance_ym_key = row.attendance_ym;
-								}
+								// let attendance_ym_key;
+								// if (vk.pubfn.isNotNull(row.resign_month)) {
+								// 	if (nowym.split('-')[1] != row.resign_month) {
+								// 		let rm = row.resign_month > 9 ? row.resign_month :
+								// 			`0${row.resign_month}`;
+								// 		attendance_ym_key = `${nowy}-${rm}`;
+								// 	} else {
+								// 		attendance_ym_key = row.attendance_ym;
+								// 	}
+								// } else {
+								// 	attendance_ym_key = row.attendance_ym;
+								// }
 
-								row.attendance_ym_key = attendance_ym_key;
+								row.attendance_ym_key = row.attendance_ym;
 
 								// 添加到集合（自动去重）
-								attendanceYmKeys.add(attendance_ym_key);
+								attendanceYmKeys.add(row.attendance_ym_key);
 
 							}
 
 							// 4. 批量获取所有费用数据
 							vk.toast('开始获取费用数据...');
-							const allCostsMap = await this.batchGetAllCosts(employeeIds, Array.from(
+							const allCostsMap = await this.batchGetAllCosts(employeeCards, Array.from(
 								attendanceYmKeys));
 
 							// 5. 获取计算规则（包含特殊人员加班规则）
 							vk.toast('获取计算规则...');
-							const rules = await this.getComputeRulesWithSpecial(employeeIds);
+							const rules = await this.getComputeRulesWithSpecial(employeeCards);
 							if (!rules) return;
 
 							// 6. 分批处理数据
@@ -1285,20 +886,21 @@
 			},
 
 			// 批量获取所有费用数据
-			async batchGetAllCosts(employeeIds, attendanceYmKeys) {
+			async batchGetAllCosts(employeeCards, attendanceYmKeys) {
 				const allCostsMap = new Map();
 
 				// 如果没有数据，直接返回空map
-				if (!employeeIds || employeeIds.length === 0 || !attendanceYmKeys || attendanceYmKeys.length === 0) {
+				if (!employeeCards || employeeCards.length === 0 || !attendanceYmKeys || attendanceYmKeys.length ===
+					0) {
 					return allCostsMap;
 				}
 
 				// 分批处理，避免一次请求数据量太大
 				const batchSize = 200; // 每批200个员工
-				const totalBatches = Math.ceil(employeeIds.length / batchSize);
+				const totalBatches = Math.ceil(employeeCards.length / batchSize);
 
-				for (let i = 0; i < employeeIds.length; i += batchSize) {
-					const batchEmployeeIds = employeeIds.slice(i, i + batchSize);
+				for (let i = 0; i < employeeCards.length; i += batchSize) {
+					const batchemployeeCards = employeeCards.slice(i, i + batchSize);
 					const currentBatch = Math.floor(i / batchSize) + 1;
 
 					vk.toast(`获取费用数据... (${currentBatch}/${totalBatches})`);
@@ -1308,7 +910,7 @@
 							url: 'admin/hrm/attendance/sys/all/getCostAll',
 							title: '获取费用数据中...',
 							data: {
-								employee_id: batchEmployeeIds,
+								card: batchemployeeCards,
 								attendance_ym_key: attendanceYmKeys
 							},
 						});
@@ -1362,7 +964,7 @@
 					}
 
 					// 给服务器一点喘息时间
-					if (i + batchSize < employeeIds.length) {
+					if (i + batchSize < employeeCards.length) {
 						await this.delay(200);
 					}
 				}
@@ -1371,7 +973,7 @@
 			},
 
 			// 获取计算规则（包含特殊人员加班规则）
-			async getComputeRulesWithSpecial(employeeIds) {
+			async getComputeRulesWithSpecial(employeeCards) {
 				try {
 					// 1. 获取迟/早退打卡规则
 					const ll_data = await vk.callFunction({
@@ -1401,7 +1003,7 @@
 
 					// 3. 获取特殊人员加班规则
 					vk.toast('获取特殊人员加班规则...');
-					const specialOvertimeMap = await this.batchGetSpecialOvertimeRules(employeeIds);
+					const specialOvertimeMap = await this.batchGetSpecialOvertimeRules(employeeCards);
 
 					return {
 						ll_data,
@@ -1417,7 +1019,7 @@
 			},
 
 			// 批量获取特殊人员加班规则
-			async batchGetSpecialOvertimeRules(employeeIds) {
+			async batchGetSpecialOvertimeRules(employeeCards) {
 				const specialRulesMap = new Map();
 
 				try {
@@ -1432,7 +1034,7 @@
 							whereJson: {
 								employee_id: {
 									$ne: 'common',
-									$in: employeeIds
+									$in: employeeCards
 								}
 							}
 						}

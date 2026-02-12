@@ -1,0 +1,74 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"lawsuit_party": {
+			"bsonType": "string",
+			"title": "诉讼方类型",
+			"description": "诉讼主体类型",
+			"enum": ["公司诉讼", "实际人及配偶诉讼"]
+		},
+		"is_limited_high": {
+			"bsonType": "bool",
+			"title": "是否限高",
+			"description": "是否被限制高消费"
+		},
+		"defendant_plaintiff": {
+			"bsonType": "string",
+			"title": "被告/原告",
+			"description": "被告或原告身份"
+		},
+		"subject_amount": {
+			"bsonType": "number",
+			"title": "标的额",
+			"description": "诉讼标的金额（万元）"
+		},
+		"lawsuit_progress": {
+			"bsonType": "string",
+			"title": "诉讼进展",
+			"description": "诉讼进展情况"
+		},
+		"preservation_frozen_amount": {
+			"bsonType": "number",
+			"title": "保全/冻结额",
+			"description": "保全或冻结金额（万元）"
+		},
+		"is_executed": {
+			"bsonType": "bool",
+			"title": "是否执行",
+			"description": "是否已执行"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

@@ -1,0 +1,11 @@
+.app.data-v-e193c911 {
+  padding: 30rpx;
+}
+.app button.data-v-e193c911 {
+  margin-bottom: 30rpx;
+}
+.tips.data-v-e193c911 {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 32rpx;
+}

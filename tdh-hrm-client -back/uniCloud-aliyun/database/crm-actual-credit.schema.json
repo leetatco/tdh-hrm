@@ -1,0 +1,78 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},
+		"actual_person_query_count": {
+			"bsonType": "int",
+			"title": "实际人半年内查询次数",
+			"description": "企业实际控制人半年内征信查询次数"
+		},
+		"actual_person_latest_query_time": {
+			"bsonType": "timestamp",
+			"title": "实际人最近一期查询时间",
+			"description": "企业实际控制人最近一期征信查询时间"
+		},
+		"actual_spouse_query_count": {
+			"bsonType": "int",
+			"title": "实际人配偶半年内查询次数",
+			"description": "企业实际控制人配偶半年内征信查询次数"
+		},
+		"actual_spouse_latest_query_time": {
+			"bsonType": "timestamp",
+			"title": "实际人配偶最近一期查询时间",
+			"description": "企业实际控制人配偶最近一期征信查询时间"
+		},
+		"legal_person_query_count": {
+			"bsonType": "int",
+			"title": "法人半年内查询次数",
+			"description": "企业法人半年内征信查询次数"
+		},
+		"legal_person_latest_query_time": {
+			"bsonType": "timestamp",
+			"title": "法人最近一期查询时间",
+			"description": "企业法人最近一期征信查询时间"
+		},
+		"legal_spouse_query_count": {
+			"bsonType": "int",
+			"title": "法人配偶半年内查询次数",
+			"description": "企业法人配偶半年内征信查询次数"
+		},
+		"legal_spouse_latest_query_time": {
+			"bsonType": "timestamp",
+			"title": "法人配偶最近一期查询时间",
+			"description": "企业法人配偶最近一期征信查询时间"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

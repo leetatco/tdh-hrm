@@ -1,0 +1,73 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "文档ID，系统自动生成"
+		},
+		"company_id": {
+			"bsonType": "string",
+			"title": "关联企业ID",
+			"description": "关联的企业记录ID"
+		},		
+		"external_guarantee_introduction": {
+			"bsonType": "string",
+			"title": "对外担保介绍",
+			"description": "对外担保情况介绍"
+		},
+		"overdue_introduction": {
+			"bsonType": "string",
+			"title": "逾期介绍",
+			"description": "逾期情况介绍"
+		},
+		"deposit_pledge_introduction": {
+			"bsonType": "string",
+			"title": "存单质押介绍",
+			"description": "存单质押情况介绍"
+		},
+		"bank_acceptance_introduction": {
+			"bsonType": "string",
+			"title": "银行承兑介绍",
+			"description": "银行承兑情况介绍"
+		},
+		"supply_chain_finance_introduction": {
+			"bsonType": "string",
+			"title": "供应链金融介绍",
+			"description": "供应链金融情况介绍"
+		},
+		"procurement_agent_introduction": {
+			"bsonType": "string",
+			"title": "代采介绍",
+			"description": "代采服务情况介绍"
+		},
+		"financial_leasing_introduction": {
+			"bsonType": "string",
+			"title": "融资租赁介绍",
+			"description": "融资租赁情况介绍"
+		},
+		"update_date": {
+			"title": "更新时间",
+			"bsonType": "timestamp",
+			"description": "更新时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		},
+		"updat_id": {
+			"title": "更新人",
+			"bsonType": "string",
+			"description": "更新人ID",
+			"trim": "both",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		}
+	}
+}

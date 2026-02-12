@@ -1,0 +1,308 @@
+{
+	"pages": [{
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"topWindow": false,
+				"leftWindow": false,
+				"navigationBarTitleText": "登录"
+			}
+		}
+	],
+	"subPackages": [{
+			"root": "pages/hrm",
+			"pages": [{
+					"path": "company/list"
+				},
+				{
+					"path": "company-filter/list"
+				},
+				{
+					"path": "department/list"
+				},
+				{
+					"path": "position/list"
+				},
+				{
+					"path": "dorm/list"
+				},
+				{
+					"path": "resigntype/list"
+				},
+				{
+					"path": "report/list"
+				},
+				{
+					"path": "employee/list"
+				},
+				{
+					"path": "employee/resignlist"
+				},
+				{
+					"path": "employee/transferlist"
+				},
+				{
+					"path": "salary/list1"
+				},
+				{
+					"path": "salary/list2"
+				},
+				{
+					"path": "salary/listc"
+				},
+				{
+					"path": "salary/uni/list"
+				},
+				{
+					"path": "salary/cost/list"
+				},
+				{
+					"path": "salary/cost/listwe"
+				},
+				{
+					"path": "salary/cost/listsb"
+				},
+				{
+					"path": "salary/cost/listgs"
+				},
+				{
+					"path": "salary/cost/listfree"
+				},
+				{
+					"path": "salary/cost/listrefer"
+				},
+				{
+					"path": "salary/cost/listclothes"
+				},
+				{
+					"path": "salary/cost/listcompanysb"
+				},
+				{
+					"path": "salary/cost/listloan"
+				},
+				{
+					"path": "salary/overtime/list"
+				},
+				{
+					"path": "salary/lateclock/list"
+				},
+				{
+					"path": "salary/employees/list"
+				},
+				{
+					"path": "attendance/approve/listhrs"
+				},
+				{
+					"path": "attendance/approve/listhrc"
+				},
+				{
+					"path": "attendance/list"
+				},
+				{
+					"path": "bank/list"
+				},
+				{
+					"path": "banklocation/list"
+				},
+				{
+					"path": "center/list"
+				},
+				{
+					"path": "contract/list"
+				},
+				{
+					"path": "insurance/list"
+				},
+				{
+					"path": "educational/list"
+				},
+				{
+					"path": "nation/list"
+				},
+				{
+					"path": "point/list"
+				}
+			]
+		}, {
+			"root": "pages/bpmn",
+			"pages": [
+				//表单设定
+				//{"path": "definition-xml/list"},已起用，因bpmn.js后端签核引擎要架设专用服务器
+				{
+					"path": "definition/list"
+				},
+				{
+					"path": "category/list"
+				},
+				{
+					"path": "condition-rule/list"
+				},
+				{
+					"path": "form-type/list"
+				},
+				{
+					"path": "instance/list"
+				},
+				{
+					"path": "process-route-config/list"
+				},
+				{
+					"path": "task/list"
+				},
+				{
+					"path": "task-history/list"
+				},
+				{
+					"path": "application-form/list"
+				}
+			]
+		}, {
+			"root": "pages/workflow",
+			"pages": [
+				//表单签核流程workflow
+				{
+					"path": "seal/seal"
+				},
+				{
+					"path": "transfer/transfer"
+				}
+			]
+		}, {
+			"root": "pages/crm",
+			"pages": [
+				//客户管理系统
+				{
+					"path": "client/list"
+				},
+				//税务介绍
+				{
+					"path": "tax/list"
+				},
+				// 企业融资介绍
+				{
+					"path": "financing/list"
+				},
+				// 征信情况介绍
+				{
+					"path": "credit/list"
+				},
+				// 政府补贴情况
+				{
+					"path": "subsidies/list"
+				},
+				// 公司流水情况
+				{
+					"path": "cash/list"
+				}, 
+				// 公司贷款介绍
+				{
+					"path": "loans/list"
+				}, 
+				// 公司投资介绍
+				{
+					"path": "investments/list"
+				}, 
+				// 公司房产介绍
+				{
+					"path": "estate/list"
+				},
+				// 公司诉讼情况
+				{
+					"path": "lawsuits/list"
+				}, 
+				// 企业经营介绍
+				{
+					"path": "operation/list"
+				}
+			]
+		},
+		{
+			"root": "pages_plugs",
+			"pages": [{
+					"path": "error/404",
+					"style": {
+						"navigationBarTitleText": "页面不存在"
+					}
+				},
+				{
+					"path": "error/403",
+					"style": {
+						"navigationBarTitleText": "无权访问"
+					}
+				},
+				{
+					"path": "error/500",
+					"style": {
+						"navigationBarTitleText": "服务器出错了"
+					}
+				},
+				{
+					"path": "system/user/list"
+				},
+				{
+					"path": "system/role/list"
+				},
+				{
+					"path": "system/permission/list"
+				},
+				{
+					"path": "system/menu/list"
+				},
+				{
+					"path": "system/app/list"
+				},
+				{
+					"path": "system/app-upgrade-center/list"
+				},
+				{
+					"path": "system_uni/vk-global-data"
+				},
+				{
+					"path": "system_uni/uni-id-log"
+				},
+				{
+					"path": "system_uni/opendb-admin-log"
+				},
+				{
+					"path": "system_uni/vk-components-dynamic"
+				},
+				{
+					"path": "system_uni/uni-id-files/list"
+				},
+				{
+					"path": "system_uni/vk-pay-orders"
+				},
+				{
+					"path": "system_uni/vk-ws-connection"
+				},
+				{
+					"path": "system_uni/vk-error-log"
+				}
+			]
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "管理后台",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"topWindow": {
+		"path": "windows/topWindow",
+		"style": {
+			"height": "100px"
+		},
+		"matchMedia": {
+			"minWidth": 0
+		}
+	},
+	"leftWindow": {
+		"path": "windows/leftWindow",
+		"style": {
+			"width": "240px"
+		}
+	}
+}

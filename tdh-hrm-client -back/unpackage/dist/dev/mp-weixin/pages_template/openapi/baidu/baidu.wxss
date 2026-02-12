@@ -1,0 +1,11 @@
+.content.data-v-db8a8165 {
+  padding: 30rpx;
+}
+.content button.data-v-db8a8165 {
+  margin-bottom: 30rpx;
+}
+.tips.data-v-db8a8165 {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 32rpx;
+}
