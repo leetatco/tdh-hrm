@@ -36,12 +36,14 @@ module.exports = {
 			attendance_ym_key,
 			resign_month,
 			employee_id,
+			card,
 			total_salary,
 			salary_type,
 			rest_type,
 			base_salary,
 			performance_salary,
 			overtime_fee,
+			penalty_fund,
 			housing_fund,
 			annual_allowance,
 			floating_bonus,
@@ -82,7 +84,7 @@ module.exports = {
 			dbName,
 			whereJson: {
 				attendance_ym_key,
-				employee_id
+				card
 			}
 		});
 		if (checkRes) {
@@ -103,12 +105,14 @@ module.exports = {
 				attendance_ym_key,
 				resign_month,
 				employee_id,
+				card,
 				total_salary,
 				salary_type,
 				rest_type,
 				base_salary,
 				performance_salary,
 				overtime_fee,
+				penalty_fund,
 				housing_fund,
 				annual_allowance,
 				floating_bonus,

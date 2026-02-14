@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["attendance_ym", "employee_id"],
+	"required": ["attendance_ym", "employee_name"],
 	"permission": {
 		"read": false,
 		"create": false,
@@ -28,41 +28,52 @@
 			"foreignKey": "hrm-employees.employee_id",
 			"trim": "both"
 		},
+		"employee_name": {
+			"title": "员工姓名",
+			"bsonType": "string",
+			"description": "员工姓名",
+			"trim": "both"
+		},
+		"department_name": {
+			"title": "部门名称",
+			"bsonType": "string",
+			"description": "部门名称",
+			"trim": "both"
+		},
+		"card": {
+			"title": "身份证号码",
+			"bsonType": "string",
+			"description": "身份证号码唯一标识，不可修改，不允许重复",
+			"trim": "both"
+		},
+		"position_name": {
+			"title": "职位名称",
+			"bsonType": "string",
+			"description": "职位名称",
+			"trim": "both"
+		},
+		"hire_date": {
+			"title": "入职日期",
+			"bsonType": "timestamp",
+			"description": "入职日期",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"resign_date": {
+			"title": "离职日期",
+			"bsonType": "string",
+			"description": "离职日期"
+		},
 		"total_salary": {
 			"title": "综合工资",
 			"bsonType": "int",
 			"description": "综合工资"
 		},
 		"rest_type": {
-			"bsonType": "int",
+			"bsonType": "string",
 			"description": "休息类型：1 单休 2 双休 3 大小周",
-			"title": "休息类型",
-			"enum": [{
-				"text": "单休",
-				"value": 1
-			}, {
-				"text": "双休",
-				"value": 2
-			}, {
-				"text": "大小周",
-				"value": 3
-			}]
-		},
-		"salary_type": {
-			"bsonType": "int",
-			"title": "工资类型",
-			"description": "工资类型：1 月薪 2 日薪 3 时薪",
-			"defaultValue": 1,
-			"enum": [{
-				"text": "月薪",
-				"value": 1
-			}, {
-				"text": "日薪",
-				"value": 2
-			}, {
-				"text": "时薪",
-				"value": 3
-			}]
+			"title": "休息类型"
 		},
 		"base_salary": {
 			"title": "基本工资",
@@ -78,6 +89,11 @@
 			"title": "固定加班",
 			"bsonType": "int",
 			"description": "固定加班"
+		},
+		"penalty_fund": {
+			"title": "社保补偿金",
+			"bsonType": "int",
+			"description": "社保补偿金"
 		},
 		"housing_fund": {
 			"title": "公积补偿金",
@@ -164,16 +180,6 @@
 			"bsonType": "int",
 			"description": "借款"
 		},
-		"last_month_sb": {
-			"title": "上月社保",
-			"bsonType": "double",
-			"description": "上月社保,保留2位小数,代扣代缴项"
-		},
-		"last_month_dk": {
-			"title": "上月社保代扣部份",
-			"bsonType": "double",
-			"description": "上月社保代扣部份,保留2位小数"
-		},
 		"this_month_sb": {
 			"title": "本月社保",
 			"bsonType": "double",
@@ -184,6 +190,22 @@
 			"bsonType": "double",
 			"description": "本月社保代扣部份,保留2位小数"
 		},
+		"last_month_sb": {
+			"title": "下月社保",
+			"bsonType": "double",
+			"description": "下月社保,保留2位小数,代扣代缴项"
+		},
+		"last_month_gjj": {
+			"title": "下月公积金",
+			"bsonType": "double",
+			"description": "下月公积金,保留2位小数,代扣代缴项"
+		},
+		"last_month_dk": {
+			"title": "下月社保代扣部份",
+			"bsonType": "double",
+			"description": "上月社保代扣部份,保留2位小数"
+		},
+
 		"dkgs": {
 			"title": "代扣个税",
 			"bsonType": "double",

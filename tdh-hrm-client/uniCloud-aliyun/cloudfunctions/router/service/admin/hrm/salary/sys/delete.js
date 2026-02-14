@@ -32,11 +32,11 @@ module.exports = {
 		// 获取前端传过来的参数
 		let {
 			_id,
-			employee_id,
+			card,
 			attendance_ym_key,			
 		} = data;
 		// 参数验证开始
-		if (vk.pubfn.isNull(_id) && (vk.pubfn.isNull(employee_id) || vk.pubfn.isNull(attendance_ym_key))) return {
+		if (vk.pubfn.isNull(_id) && (vk.pubfn.isNull(card) || vk.pubfn.isNull(attendance_ym_key))) return {
 			code: -1,
 			msg: 'id或身份证号或考勤日期不能为空'
 		};
@@ -51,7 +51,7 @@ module.exports = {
 			await vk.baseDao.del({
 				dbName,
 				whereJson: {
-					employee_id,
+					card,
 					attendance_ym_key					
 				}
 			})

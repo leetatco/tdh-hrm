@@ -19,7 +19,7 @@
 				<el-upload style="display: inline-block;margin-left: 20rpx;margin-right: 20rpx;" accept=".xlsx, .xls"
 					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')" :auto-upload="false" :limit="1"
 					:show-file-list="false" :on-change="handleChange" :file-list="fileList" action="">
-					<el-button type="primary" size="small" icon="el-icon-upload2">导入excel</el-button>
+					<el-button type="success" size="small" icon="el-icon-upload2">导入excel</el-button>
 				</el-upload>
 				<el-button type="primary" size="small" icon="el-icon-tickets" @click="exportExcelModel"
 					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')"> 下载模版
@@ -806,7 +806,7 @@
 						},
 						{
 							"key": "department_name",
-							"title": "身份证号码",
+							"title": "部门",
 							"type": "text"
 						},
 						{

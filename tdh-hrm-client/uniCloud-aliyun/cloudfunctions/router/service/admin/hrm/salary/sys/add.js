@@ -50,6 +50,8 @@ module.exports = {
 			performance_salary,
 			//固定加班
 			overtime_fee,
+			//社保补偿金
+			penalty_fund,
 			//公积补偿金
 			housing_fund,
 			//年度补偿金
@@ -135,6 +137,7 @@ module.exports = {
 				base_salary,
 				performance_salary,
 				overtime_fee,
+				penalty_fund,
 				housing_fund,
 				annual_allowance,
 				floating_bonus,
