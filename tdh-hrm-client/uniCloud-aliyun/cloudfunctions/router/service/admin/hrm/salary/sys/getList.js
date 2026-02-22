@@ -26,21 +26,14 @@ module.exports = {
 			_
 		} = util;
 		let {
-			uid,
-			filterWhereJson,
-			company_ids = []
+			uid			
 		} = data;
 		let res = {
 			code: 0,
 			msg: ''
 		};
 		// 业务逻辑开始-----------------------------------------------------------
-		let dbName = "hrm-salary"; // 表名
-		if (filterWhereJson) {
-			filterWhereJson = {
-				"employees.company_id": _.in(company_ids)
-			}
-		}
+		let dbName = "hrm-salary"; // 表名		
 		res = await vk.baseDao.getTableData({
 			dbName,
 			data,

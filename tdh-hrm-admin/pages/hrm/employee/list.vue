@@ -595,6 +595,23 @@
 								pageSize: 1000
 							}
 						},
+						{
+							key: "educational_id",
+							title: "学历",
+							type: "remote-select",
+							placeholder: "请选择学历",
+							width: colWidth,
+							action: "admin/hrm/educational/sys/getList",
+							props: {
+								list: "rows",
+								value: "educational_id",
+								label: "educational_name"
+							},
+							showAll: true,
+							actionData: {
+								pageSize: 1000
+							}
+						},
 						//{"key":"card","title":"身份证号码","type":"text","width":200,"mode":"="},
 						//{"key":"birth_date","title":"出生日期","type":"datetimerange","width":200,"mode":"="},
 						//{"key":"mobile","title":"手机号码","type":"text","width":200,"mode":"="},

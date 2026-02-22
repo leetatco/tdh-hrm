@@ -115,6 +115,14 @@
 					],
 					// 表格字段显示规则
 					columns: [{
+							"key": "attendance_ym",
+							"title": "考勤日期",
+							"type": "date",
+							"dateType": "date",
+							"fixed": true,
+							"valueFormat": "yyyy-MM",
+							"format": "yyyy-MM"
+						}, {
 							"key": "total_salary",
 							"title": "综合",
 							"type": "number",
@@ -1069,8 +1077,14 @@
 							}
 
 							// 重新计算应发工资和实发工资是否正确
+							item.gross_salary = item.gross_salary || 0;
+							item.real_salary = item.real_salary || 0;
 							let newItem = vk.pubfn.copyObject(item);
 							newItem = this.calculateSalary(newItem);
+							
+							console.log("item:",item);
+							console.log("newItem:",newItem);
+							
 							if (newItem.gross_salary !== item.gross_salary || newItem.real_salary !== item
 								.real_salary) {
 								errorData.push({
@@ -1509,60 +1523,61 @@
 				// 工资总和=
 				let total = 0;
 				// 基本工资+
-				total += item.base_salary;
+				total += vk.pubfn.string2Number(item.base_salary || 0);
 				// 绩效工资+
-				total += item.performance_salary || 0;
+				total += vk.pubfn.string2Number(item.performance_salary || 0);
 				// 固定加班+
-				total += item.overtime_fee || 0;
+				total += vk.pubfn.string2Number(item.overtime_fee || 0);
 				// 社保补偿金+
-				total += item.penalty_fund || 0;
+				total += vk.pubfn.string2Number(item.penalty_fund || 0);
 				// 公积补偿金+
-				total += item.housing_fund || 0;
+				total += vk.pubfn.string2Number(item.housing_fund || 0);
 				// 年度补偿金+
-				total += item.annual_allowance || 0;
+				total += vk.pubfn.string2Number(item.annual_allowance || 0);
 				// 浮动奖励+
-				total += item.floating_bonus || 0;
+				total += vk.pubfn.string2Number(item.floating_bonus || 0);
 				// 保密费
-				total += item.confidentiality_fee || 0;
+				total += vk.pubfn.string2Number(item.confidentiality_fee || 0);
 
 				// 计算应发工资=工资总和/应勤天数*实际出勤
 				let grossSalary = total / item.work_days * item.real_days;
 				item.gross_salary = vk.pubfn.toDecimal(grossSalary, 2);
 
 				// 计算实发工资
-				// 应发工资
-				let realSalary = item.gross_salary || 0;
+				let realSalary = 0;
+				// 实发工资				
+				realSalary += vk.pubfn.string2Number(item.gross_salary || 0);
 
 				// 加项
 				// 加班费
-				realSalary += item.overtime_cost || 0;
+				realSalary += vk.pubfn.string2Number(item.overtime_cost || 0);
 				// 放假补助
-				realSalary += item.free_cost || 0;
+				realSalary += vk.pubfn.string2Number(item.free_cost || 0);
 				// 补助
-				realSalary += item.grant || 0;
+				realSalary += vk.pubfn.string2Number(item.grant || 0);
 				// 介绍费
-				realSalary += item.agency_fee || 0;
+				realSalary += vk.pubfn.string2Number(item.agency_fee || 0);
 				// 其它
-				realSalary += item.other_cost || 0;
+				realSalary += vk.pubfn.string2Number(item.other_cost || 0);
 
 				// 减项
 				// 水电
-				realSalary -= item.we_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.we_cost || 0);
 				// 工衣
-				realSalary -= item.clothes_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.clothes_cost || 0);
 				// 迟到早退
-				realSalary -= item.earlytime_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.earlytime_cost || 0);
 				// 未打卡
-				realSalary -= item.missed_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.missed_cost || 0);
 				// 借款
-				realSalary -= item.loan_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.loan_cost || 0);
 				// 本月社保 				
-				realSalary -= item.this_month_sb || 0;
+				realSalary -= vk.pubfn.string2Number(item.this_month_sb || 0);
 				// 本月代扣部份
-				realSalary -= item.this_month_dk || 0;
+				realSalary -= vk.pubfn.string2Number(item.this_month_dk || 0);
 
 				// 代扣个税
-				realSalary -= item.dkgs || 0;
+				realSalary -= vk.pubfn.string2Number(item.dkgs || 0);
 
 				// 实发工资
 				item.real_salary = vk.pubfn.toDecimal(realSalary, 2);
@@ -1923,6 +1938,14 @@
 					fileName: nowym + '月份工资表',
 					title: "正在导出数据...",
 					columns: [{
+							"key": "attendance_ym",
+							"title": "考勤日期",
+							"type": "date",
+							"dateType": "date",
+							"fixed": true,
+							"valueFormat": "yyyy-MM",
+							"format": "yyyy-MM"
+						}, {
 							"key": "total_salary",
 							"title": "综合",
 							"type": "number"

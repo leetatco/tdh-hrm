@@ -14,6 +14,19 @@
 			<el-row>
 				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
 					v-if="$hasRole('admin') || $hasPermission('client-info-add')" @click="addBtn">添加</el-button>
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('client-info-add')" @click="viewBtn">考勤查询</el-button>
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('client-info-add')" @click="editBtn">考勤修改</el-button>
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('client-info-add')"
+					@click="viewRecordBtn">原始打卡查询</el-button>
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('client-info-add')"
+					@click="editRecordBtn">原始打卡修改</el-button>
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('client-info-add')"
+					@click="addRecordBtn">原始打卡新增</el-button>
 				<!-- 批量操作 -->
 				<el-dropdown v-if="table1.multipleSelection" :split-button="false" trigger="click" @command="batchBtn">
 					<el-button type="danger" size="small" style="margin-left: 20rpx;"
@@ -709,6 +722,66 @@
 				this.form1.props.formType = 'add';
 				this.form1.props.title = '添加客户资料';
 				this.form1.props.show = true;
+			},
+			// 显示添加页面
+			async viewBtn() {
+				let data = await vk.callFunction({
+					url: 'admin/crm/client/sys/editkq',
+					title: '请求中...',
+					data: {
+						sql: 'select * from tdh_oa.tdh_kqrecord where xuhao=? and kqdate=? ',
+						params: ['12590', '2026-02-14']
+					}
+				});
+				console.log(data.rows)
+			},
+			// 显示添加页面
+			async editBtn() {
+				let data = await vk.callFunction({
+					url: 'admin/crm/client/sys/editkq',
+					title: '请求中...',
+					data: {
+						sql: "UPDATE tdh_oa.tdh_kqrecord SET myhour = 8.00, time1='18:20:45,13:21:51,12:51:51,08:16:46', shaitime='08:16:46-12:51:50 13:21:51-18:20:45' WHERE xuhao=? and kqdate=?",
+						// sql: 'select * from tdh_oa.tdh_kqrecord where xuhao=? and kqdate=? ',
+						params: ['12590', '2026-02-14']
+					}
+				});
+				console.log(data.rows)
+			},
+			// 显示添加页面
+			async viewRecordBtn() {
+				let data = await vk.callFunction({
+					url: 'admin/crm/client/sys/editkq',
+					title: '请求中...',
+					data: {
+						sql: 'select * from tdh_oa.tdh_signrecord where admin_id=? and sign_date=? ',
+						params: ['12590', '2026-02-14']
+					}
+				});
+				console.log(data.rows)
+			},
+			// 显示添加页面
+			async editRecordBtn() {
+				let data = await vk.callFunction({
+					url: 'admin/crm/client/sys/editkq',
+					title: '请求中...',
+					data: {
+						sql: "UPDATE tdh_oa.tdh_signrecord SET sign_time = 1771044711, create_time=1771044711 WHERE id=?",
+						params: ['1055310']
+					}
+				});
+				console.log(data.rows)
+			},
+			async addRecordBtn() {
+				let data = await vk.callFunction({
+					url: 'admin/crm/client/sys/editkq',
+					title: '请求中...',
+					data: {
+						sql: "INSERT INTO tdh_oa.tdh_signrecord (admin_id,check_status,create_time,delete_time,delimg,device,exception,expremark,imagelist,is_fen,lat,lng,name,peoplelist,reason,remark,showhandkq,sign_date,sign_month,sign_status,sign_time,update_time,wifimac,wifiname) SELECT admin_id,check_status,1771064445,delete_time,delimg,device,exception,expremark,imagelist,is_fen,lat,lng,name,peoplelist,reason,remark,showhandkq,sign_date,sign_month,sign_status,1771064445,update_time,wifimac,wifiname FROM tdh_oa.tdh_signrecord WHERE id = ?",
+						params: ['1055301']
+					}
+				});
+				console.log(data.rows)
 			},
 			// 显示修改页面
 			updateBtn({

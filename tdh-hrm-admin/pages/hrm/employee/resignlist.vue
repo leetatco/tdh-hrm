@@ -1038,18 +1038,6 @@
 								"width": colWidth
 							},
 							{
-								"key": "card_location",
-								"title": "户口所在地",
-								"type": "textarea",
-								"maxlength": "99",
-								"showWordLimit": true,
-								"width": colWidth,
-								"autosize": {
-									minRows: 3,
-									maxRows: 10
-								}
-							},
-							{
 								key: "internal_id",
 								title: "内部介绍人",
 								type: "table-select",
@@ -1096,6 +1084,18 @@
 									return {
 										status: 1
 									}
+								}
+							},
+							{
+								"key": "card_location",
+								"title": "户口所在地",
+								"type": "textarea",
+								"maxlength": "99",
+								"showWordLimit": true,
+								"width": colWidth,
+								"autosize": {
+									minRows: 3,
+									maxRows: 10
 								}
 							},
 							{
@@ -1859,7 +1859,7 @@
 							if (vk.pubfn.isNull(item.card)) {
 								vk.alert('身份证号不能为空');
 								break;
-							}					
+							}
 
 							// 获取employee_id
 							const employeeInfo = employeeMap.get(item.card);

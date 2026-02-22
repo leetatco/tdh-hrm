@@ -35,10 +35,9 @@ pubFun.decrypt = (ciphertext) => {
 pubFun.createPool = async () => {
 	const con = await mysql.createPool({
 		host: '113.90.145.57', // 从环境变量读取
-		port: '33021',
+		port: '33021',		
 		user: await pubFun.decrypt('U2FsdGVkX192ae3J7n/QIMxrrchQW9Kb0jxBMiazE1k='),
-		password: await pubFun.decrypt(
-			'U2FsdGVkX1855wFKrMYyHktorZLRHuiJZv8xNeQgLPmhEYy2O1psNPGpgoXB6JO1'),
+		password: await pubFun.decrypt('U2FsdGVkX1855wFKrMYyHktorZLRHuiJZv8xNeQgLPmhEYy2O1psNPGpgoXB6JO1'),
 		database: 'tdh_oa',
 		charset: 'utf8mb4',
 		waitForConnections: true,

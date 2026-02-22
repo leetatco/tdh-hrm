@@ -27,9 +27,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			formData,
-			filterWhereJson,
-			company_ids = [],
+			formData			
 		} = data;
 		let res = {
 			code: 0,
@@ -37,12 +35,6 @@ module.exports = {
 		};
 		// 业务逻辑开始-----------------------------------------------------------		
 		let dbName = "hrm-attendance-approve"; // 表名	
-		if (filterWhereJson) {
-			filterWhereJson = {
-				"employees.company_id": _.in(company_ids)
-			}
-		}
-
 		res = await vk.baseDao.getTableData({
 			dbName,
 			data,
@@ -51,10 +43,10 @@ module.exports = {
 				name: "attendance_ym",
 				type: "asc"
 			}, {
-				name: "employee_id",
+				name: "card",
 				type: "asc"
 			}, {
-				name: "resign_month",
+				name: "department_name",
 				type: "desc"
 			}],
 			// 副表
@@ -64,8 +56,7 @@ module.exports = {
 				foreignKey: "_id",
 				as: "users",
 				limit: 1
-			}],
-			lastWhereJson: filterWhereJson
+			}]
 		});
 		return res;
 	}
