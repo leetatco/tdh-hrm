@@ -117,7 +117,7 @@
 						},
 						{
 							"key": "position_name",
-							"title": "职位",
+							"title": "岗位",
 							"type": "text",
 							"width": colWidth - 50
 						},
@@ -134,7 +134,7 @@
 							"key": "resign_date",
 							"title": "离职日期",
 							"type": "text",
-							"width": colWidth - 100
+							"width": colWidth - 50
 						},
 						{
 							"key": "work_days",
@@ -248,8 +248,7 @@
 
 								}
 							],
-							queryColumns: [
-								{
+							queryColumns: [{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -905,7 +904,7 @@
 						},
 						{
 							"key": "position_name",
-							"title": "职位",
+							"title": "岗位",
 							"type": "text"
 						},
 						{

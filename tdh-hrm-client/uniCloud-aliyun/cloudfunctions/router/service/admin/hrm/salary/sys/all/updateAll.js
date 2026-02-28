@@ -1,7 +1,7 @@
 module.exports = {
 	/**
 	 * 修改数据
-	 * @url admin/hrm/salary/sys/companysb/update 前端调用的url参数地址
+	 * @url admin/hrm/attendance/sys/all/updateAll 前端调用的url参数地址
 	 * data 请求参数 说明
 	 * res 返回参数说明
 	 * @params {Number} code 错误码，0表示成功
@@ -27,51 +27,41 @@ module.exports = {
 			code: 0,
 			msg: 'ok'
 		};
-		let dbName = "hrm-salary-companysb"; // 表名
+		let dbName = "hrm-salary"; // 表名
 		// 业务逻辑开始-----------------------------------------------------------
 		// 获取前端传过来的参数
 		let {
-			_id,
-			attendance_ym,
-			card,
-			amount,
-			provident_fund,
-			comment,
-			update_date,
-			update_id
+			items = [],
+				enable_fd1,
+				enable_fd2,
+				update_date,
+				update_id
 		} = data;
-		// 参数验证开始
-		if (vk.pubfn.isNull(_id)) return {
-			code: -1,
-			msg: 'id不能为空'
-		};
+		// 参数验证开始				
+		if (!items || !Array.isArray(items) || items.length === 0) {
+			res.code = -1;
+			res.msg = 'items参数必须是有效的非空数组';
+			return res;
+		}
 
-		let checkRes = await vk.baseDao.findByWhereJson({
-			dbName,
-			whereJson: {
-				attendance_ym,
-				card
-			}
-		});
-		if (checkRes) {
-			if (_id !== checkRes._id)
-				return {
-					code: -1,
-					msg: "员工重复",
-					rows: checkRes
-				}
+		// 提取所有_id值
+		let ids = items.map(item => item._id).filter(Boolean);
+
+		if (ids.length === 0) {
+			res.code = -1;
+			res.msg = 'ids参数中的_id值不能为空';
+			return res;
 		}
 		// 参数验证结束		
-		// 执行 数据库 updateById 命令
-		await vk.baseDao.updateById({
+		// 执行 数据库 update 命令
+		await vk.baseDao.update({
 			dbName,
-			id: _id,
+			whereJson: {
+				_id: _.in(ids)
+			},
 			dataJson: {
-				attendance_ym,
-				card,
-				amount,
-				provident_fund,
-				comment,
+				enable_fd1,
+				enable_fd2,
 				update_id: uid,
 				update_date: new Date().getTime()
 			}

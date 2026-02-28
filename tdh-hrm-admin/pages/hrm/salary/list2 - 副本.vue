@@ -14,7 +14,8 @@
 					v-if="$hasRole('admin') || $hasPermission('hrm-salary-export')" @click="exportExcelAll"> 导出全部
 				</el-button>
 				<!-- 批量操作 -->
-				<el-dropdown v-if="table1.multipleSelection && ($hasRole('admin') || $hasPermission('hrm-salary-edit'))" :split-button="false" trigger="click" @command="batchBtn">
+				<el-dropdown v-if="table1.multipleSelection && ($hasRole('admin') || $hasPermission('hrm-salary-edit'))"
+					:split-button="false" trigger="click" @command="batchBtn">
 					<el-button type="danger" size="small" style="margin-left: 20rpx;"
 						:disabled="table1.multipleSelection.length === 0">
 						批量审核<i class="el-icon-arrow-down el-icon--right"></i>

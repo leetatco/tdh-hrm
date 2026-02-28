@@ -95,24 +95,19 @@
 							type: "date",
 							dateType: "date",
 							valueFormat: "yyyy-MM",
+							width: colWidth - 100,
 							format: "yyyy-MM"
 						}, {
-							"key": "employee_id",
-							"title": "员工工号",
+							"key": "card",
+							"title": "身份证号",
 							"type": "text",
-							"width": colWidth - 100
+							"width": colWidth
 						},
 						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",
 							"type": "text",
 							"width": colWidth - 100
-						},
-						{
-							"key": "employees.card",
-							"title": "身份证号码",
-							"type": "text",
-							"width": colWidth
 						},
 						{
 							"key": "clothes_cost",
@@ -165,19 +160,13 @@
 							"mode": "="
 						},
 						{
-							key: "employee_id",
+							key: "card",
 							title: "",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -187,28 +176,22 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: colWidth - 50,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
-									width: colWidth - 50,
+									width: 150,
 									mode: "%%"
-								}, {
+								},
+								{
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									width: colWidth,
+									width: 150,
 									mode: "%%"
 								}
 
@@ -261,20 +244,13 @@
 									"delete"
 								],
 								columns: [{
-										key: "employee_id",
+										key: "card",
 										title: "员工",
 										type: "table-select",
 										placeholder: "选择员工",
-										action: "admin/hrm/employees/sys/getList",
+										action: "admin/hrm/attendance/sys/getList",
 										multiple: false,
-										isUnique: true,
 										columns: [{
-												key: "employee_id",
-												title: "员工工号",
-												type: "text",
-												idKey: true
-											}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-											{
 												key: "employee_name",
 												title: "员工姓名",
 												type: "text",
@@ -284,28 +260,22 @@
 												key: "card",
 												title: "身份证号码",
 												type: "text",
-												nameKey: true
+												idKey: true
 
 											}
 										],
 										queryColumns: [{
-												key: "employee_id",
-												title: "员工工号",
-												type: "text",
-												width: colWidth - 50,
-												mode: "%%"
-											},
-											{
 												key: "employee_name",
 												title: "员工姓名",
 												type: "text",
-												width: colWidth - 50,
+												width: 150,
 												mode: "%%"
-											}, {
+											},
+											{
 												key: "card",
 												title: "身份证号码",
 												type: "text",
-												width: colWidth,
+												width: 150,
 												mode: "%%"
 											}
 										],
@@ -348,7 +318,7 @@
 									{
 										key: "getdate",
 										title: "领工衣时间",
-										type: "textarea",										
+										type: "textarea",
 										disabled: true,
 										maxlength: "100",
 										showWordLimit: true,
@@ -518,9 +488,9 @@
 				const ys = vk.myfn.calculateServiceYears(val.option.hire_date);
 				this.$set(val.formData, "years", ys);
 				if (vk.pubfn.isNotNull(val.option.clothes)) {
-					let strDates='';
-					val.option.clothes.forEach(e=>{
-						strDates+=`${e.attendance_ym}\n`
+					let strDates = '';
+					val.option.clothes.forEach(e => {
+						strDates += `${e.attendance_ym}\n`
 					})
 					this.$set(val.formData, "getdate", strDates);
 				}

@@ -28,7 +28,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			employee_id
+			card
 		} = data;
 		let res = {
 			code: 0,
@@ -39,11 +39,11 @@ module.exports = {
 		res = await vk.baseDao.getTableData({
 			dbName,
 			whereJson: {
-				employee_id
+				card
 			},
 			groupJson: {
 				_id: {
-					employee_id: "$employee_id"
+					card: "$card"
 				},
 				total: $.sum("$repayment_amount"),
 			},

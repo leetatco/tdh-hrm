@@ -32,7 +32,7 @@ module.exports = {
 		// 获取前端传过来的参数
 		let {
 			_id,
-			employee_id,
+			card,
 			salary,
 			salary_type,
 			confirm_id,
@@ -48,7 +48,7 @@ module.exports = {
 		let checkRes = await vk.baseDao.findByWhereJson({
 			dbName,
 			whereJson: {
-				employee_id
+				card
 			}
 		})
 		if (checkRes) {
@@ -65,7 +65,7 @@ module.exports = {
 			dbName,
 			id: _id,
 			dataJson: {
-				employee_id,
+				card,
 				salary,
 				salary_type,
 				confirm_id,

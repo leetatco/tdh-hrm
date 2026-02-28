@@ -10,14 +10,12 @@
 		<!-- 自定义按钮区域开始 -->
 		<view>
 			<el-row>
-				<el-button type="success" size="small" icon="vk-icon-punch_light" v-if="$hasRole('admin')"
-					@click="printBtn">进入列印页
-				</el-button><el-button type="primary" size="small" icon="el-icon-edit-outline"
+				<el-button type="primary" size="small" icon="el-icon-edit-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-salary-export')" @click="exportExcelAll"> 导出全部
 				</el-button>
 				<!-- 批量操作 -->
-				<el-dropdown v-if="table1.multipleSelection && $hasRole('admin')" :split-button="false" trigger="click"
-					@command="batchBtn">
+				<el-dropdown v-if="table1.multipleSelection && ($hasRole('admin'))" :split-button="false"
+					trigger="click" @command="batchBtn">
 					<el-button type="danger" size="small" style="margin-left: 20rpx;"
 						:disabled="table1.multipleSelection.length === 0">
 						批量审核<i class="el-icon-arrow-down el-icon--right"></i>
@@ -30,31 +28,30 @@
 			</el-row>
 		</view>
 		<!-- 自定义按钮区域结束 -->
+
 		<!-- 表格组件开始 -->
 		<vk-data-table ref="table1" :action="table1.action" :columns="table1.columns" :query-form-param="queryForm1"
 			:right-btns="table1.rightBtns" :selection="true" :row-no="false" :pagination="true" @update="updateBtn"
 			@delete="deleteBtn" @current-change="currentChange" @selection-change="selectionChange"></vk-data-table>
 		<!-- 表格组件结束 -->
+
 		<!-- 添加或编辑的弹窗开始 -->
-		<vk-data-dialog v-model="form1.props.show" :title="form1.props.title" width="700px" mode="form"
+		<vk-data-dialog v-model="form1.props.show" :title="form1.props.title" width="800px" mode="form"
 			:close-on-click-modal="false">
 			<vk-data-form v-model="form1.data" :rules="form1.props.rules" :action="form1.props.action"
-				:form-type="form1.props.formType" :columns='form1.props.columns' label-width="100px"
-				@success="form1.props.show = false;refresh();" :inline="true" :columnsNumber="2"></vk-data-form>
+				:form-type="form1.props.formType" :before-action="form1.props.beforeAction"
+				:columns='form1.props.columns' label-width="110px" @success="form1.props.show = false;refresh();"
+				:inline="true" :columnsNumber="2"></vk-data-form>
 		</vk-data-dialog>
 		<!-- 添加或编辑的弹窗结束 -->
-		<!-- 打印弹窗开始 -->
-		<vk-data-dialog v-model="formPrint.props.show" :title="formPrint.props.title" width="1000px" mode="form"
-			:close-on-click-modal="false">
-			<print-table :datas="tableData"></print-table>
-		</vk-data-dialog>
-		<!-- 打印弹窗结束 -->
+
 		<!-- 页面内容结束 -->
 	</view>
 </template>
 
 <script>
-	import PrintTable from '@/components/custom-print-table/custom-print-table.vue'
+	import myfn from '../../../common/function/myPubFunction';
+
 	let vk = uni.vk; // vk实例
 	let originalForms = {}; // 表单初始化数据
 	const colWidth = 200;
@@ -69,13 +66,9 @@
 	let nowm1 = nowm > 9 ? nowm : `0${nowm}`;
 	const nowym = vk.myfn.normalizeMonth(`${nowy}-${nowm1}`);
 	export default {
-		components: {
-			'print-table': PrintTable
-		},
 		data() {
 			// 页面数据变量
 			return {
-				tableData: [],
 				fileList: [],
 				// 页面是否请求中或加载中
 				loading: false,
@@ -98,6 +91,13 @@
 						{
 							mode: 'update',
 							title: '编辑',
+							show: (item) => {
+								return this.$hasRole('admin')
+							}
+						},
+						{
+							mode: 'delete',
+							title: '删除',
 							show: (item) => {
 								return this.$hasRole('admin')
 							}
@@ -124,6 +124,7 @@
 							"title": "制",
 							"fixed": true,
 							"type": "text",
+							"show": ["none"],
 							"width": colWidth - 100
 						},
 						{
@@ -506,23 +507,16 @@
 						//{"key":"update_id","title":"更新人","type":"text","width":colWidth,"mode":"="}
 					]
 				},
-				formPrint: {
-					data: {},
-					props: {
-
-					}
-				},
 				form1: {
 					// 表单请求数据，此处可以设置默认值
-					data: {
+					data: {},
+					// 表单属性
+					props: {
 						beforeAction: (formData) => {
 							// 可在此处修改 formData 后返回 formData，若在此处return false，则表单不触发提交请求。
 							formData = this.calculateSalary(formData);
 							return formData;
 						},
-					},
-					// 表单属性
-					props: {
 						// 表单请求地址
 						action: "",
 						// 表单字段显示规则
@@ -582,13 +576,13 @@
 								disabled: true,
 								"width": colWidth
 							},
-							{
-								"key": "rest_type",
-								"title": "休息类型",
-								"type": "text",
-								disabled: true,
-								"width": colWidth
-							},
+							// {
+							// 	"key": "rest_type",
+							// 	"title": "休息类型",
+							// 	"type": "text",
+							// 	disabled: true,
+							// 	"width": colWidth
+							// },
 							{
 								"key": "base_salary",
 								"title": "基本工资",
@@ -669,72 +663,104 @@
 							{
 								"key": "overtime_cost",
 								"title": "加班费",
-								"type": "text",
+								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "free_cost",
 								"title": "放假补助",
 								"type": "number",
+								min: -10000,
+								controls: true,
+								precision: 2,
+								step: 0.01,
 								"width": colWidth
 							},
 							{
 								"key": "grant",
 								"title": "补助",
 								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "agency_fee",
 								"title": "介绍费",
-								"type": "text",
+								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "other_cost",
 								"title": "其它",
-								"type": "text",
+								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "we_cost",
 								"title": "水电",
 								"type": "number",
+								min: -10000,
+								controls: true,
+								precision: 2,
+								step: 0.01,
 								"width": colWidth
 							},
 							{
 								"key": "clothes_cost",
 								"title": "工衣",
 								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "earlytime_cost",
 								"title": "迟到早退",
 								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "missed_cost",
 								"title": "未打卡",
 								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "loan_cost",
 								"title": "借款",
 								"type": "number",
+								min: -10000,
+								controls: true,
 								"width": colWidth
 							},
 							{
 								"key": "this_month_sb",
 								"title": "本月社保",
 								"type": "number",
+								min: -10000,
+								controls: true,
+								precision: 2,
+								step: 0.01,
 								"width": colWidth
 							},
 							{
 								"key": "this_month_dk",
 								"title": "本月代扣部份",
+								min: -10000,
+								controls: true,
+								precision: 2,
+								step: 0.01,
 								"type": "number",
 								"width": colWidth
 							},
@@ -742,6 +768,10 @@
 								"key": "dkgs",
 								"title": "代扣个税",
 								"type": "number",
+								min: -10000,
+								controls: true,
+								precision: 2,
+								step: 0.01,
 								"width": colWidth
 							},
 							{
@@ -776,6 +806,12 @@
 								"width": colWidth
 							},
 							{
+								"key": "enable_fd1",
+								"title": "财务审核一级",
+								"type": "switch",
+								"width": colWidth
+							},
+							{
 								key: "comment",
 								title: "备注",
 								type: "textarea",
@@ -788,8 +824,8 @@
 								}
 							},
 							{
-								"key": "enable_fd1",
-								"title": "财务审核一级",
+								"key": "enable_fd2",
+								"title": "财务审核二级",
 								"type": "switch",
 								"width": colWidth
 							}
@@ -840,18 +876,6 @@
 		},
 		// 函数
 		methods: {
-			// 显示打印页面
-			printBtn() {
-				this.tableData = this.$refs.table1.getTableData();
-				if (vk.pubfn.isNotNull(this.tableData)) {
-					this.tableData.map(item => {
-						item.rest_type_name = this.toRestTypeText(item);
-					})
-				}
-				// console.log(this.tableData);
-				this.formPrint.props.title = nowym + '月工资表';
-				this.formPrint.props.show = true;
-			},
 			//导入xls表格文件
 			async handleChange(file) {
 				// 定义字段类型
@@ -1070,20 +1094,28 @@
 							}
 
 							// 重新计算应发工资和实发工资是否正确
+							item.gross_salary = item.gross_salary || 0;
+							item.real_salary = item.real_salary || 0;
 							let newItem = vk.pubfn.copyObject(item);
 							newItem = this.calculateSalary(newItem);
+
+							// 财务审核状态
+							item.enable_fd1 = newItem.enable_fd1;
+							item.enable_fd2 = newItem.enable_fd2;
+
+							console.log("item:", item);
+							console.log("newItem:", newItem);
+
 							if (newItem.gross_salary !== item.gross_salary || newItem.real_salary !== item
 								.real_salary) {
 								errorData.push({
 									item,
 									reason: `应发工资:${newItem.gross_salary}=${item.gross_salary},实发工资:${newItem.real_salary}=${item.real_salary}`
 								});
-								continue;
+								// continue;
 							}
-
-							// 财务审核状态
-							item.enable_fd1 = false;
-							item.enable_fd2 = false;
+							//处理月份
+							item.attendance_ym_key = vk.myfn.toFormatDate(item.attendance_ym_key);
 
 							//修改新增人员和时间									
 							item.update_date = new Date().getTime();
@@ -1104,26 +1136,31 @@
 								errorMsg += `\n...还有${errorData.length - 5}条错误数据`;
 							}
 
-							return vk.alert(`所有数据验证失败:\n${errorMsg}`, "导入失败", "确定");
-						}
+							vk.confirm(`数据验证失败:\n${errorMsg}`, "是否继续导入数据", "是", "否", async (res) => {
+								if (res.confirm) {
+									// 点击确定按钮后的回调	
+									// 6. 批量处理数据
+									vk.toast('开始导入数据...');
+									const result = await vk.callFunction({
+										url: 'admin/hrm/salary/sys/all/addAll',
+										title: '请求中...',
+										data: {
+											items: validData
+										},
+									});
 
-						// 6. 批量处理数据
-						vk.toast('开始导入数据...');
-						const result = await vk.callFunction({
-							url: 'admin/hrm/salary/sys/all/addAll',
-							title: '请求中...',
-							data: {
-								items: validData
-							},
-						});
-
-						if (result.code === 0) {
-							let resultMessage = `导入完成！成功: ${result.id.length}条`;
-							vk.alert(resultMessage, "导入成功", "确定", () => {
-								this.refresh();
-							})
-						} else {
-							vk.alert(`导入Excel失败!`, "系统错误", "确定");
+									if (result.code === 0) {
+										let resultMessage = `导入完成！成功: ${result.id.length}条`;
+										vk.alert(resultMessage, "导入成功", "确定", () => {
+											this.refresh();
+										})
+									} else {
+										vk.alert(`导入Excel失败!`, "系统错误", "确定");
+									}
+								} else {
+									return;
+								}
+							});
 						}
 					})
 				} catch (error) {
@@ -1203,11 +1240,11 @@
 							}
 
 							// 3. 提取所有员工信息，用于批量查询
-							const employeeIds = resAprove.rows.map(item => item.employee_id);
+							const cards = resAprove.rows.map(item => item.card);
 							const attendanceYmKeys = [...new Set(resAprove.rows.map(item => item
 								.attendance_ym_key))];
 							const totalSalaries = [...new Set(resAprove.rows.map(item => item.salarys
-								.salary))];
+								?.salary).filter(salary => salary != null))];
 
 							// 批量获取各种数据
 							vk.toast('批量获取相关数据...');
@@ -1218,11 +1255,12 @@
 								sbMap,
 								companySbMap
 							] = await Promise.all([
+								//薪资分配规则
 								this.batchGetSalaryRules(totalSalaries),
-								this.batchGetFreeData(employeeIds, attendanceYmKeys),
-								this.batchGetGsData(employeeIds, attendanceYmKeys),
-								this.batchGetSbData(employeeIds, attendanceYmKeys),
-								this.batchGetCompanySbData(employeeIds, attendanceYmKeys)
+								this.batchGetFreeData(cards, attendanceYmKeys),
+								this.batchGetGsData(cards, attendanceYmKeys),
+								this.batchGetSbData(cards, attendanceYmKeys),
+								this.batchGetCompanySbData(cards, attendanceYmKeys)
 							]);
 
 							// 4. 处理每个员工的数据
@@ -1235,22 +1273,22 @@
 									if (vk.pubfn.isNull(item.salarys) || vk.pubfn.isNull(item.salarys
 											.salary)) {
 										errors.push(
-											`员工姓名：${item.employees.employee_name}/${item.employees.employee_id}, 没有定薪数据！`
+											`员工姓名：${item.employee_name}/${item.card}, 没有定薪数据！`
 										);
 										continue;
 									}
 
 									// 获取薪资分配规则
 									const salaryRule = salaryRulesMap.get(item.salarys.salary);
-									if (!salaryRule && item.salarys.salary_type == 1) {
+									if (!salaryRule && item.salarys.salary_type === '1') {
 										errors.push(
-											`综合：${item.salarys.salary}, 基本资料：工号-${item.employees.employee_id}/月薪, 没有薪资分配表数据！`
+											`综合：${item.salarys.salary}, 基本资料：${item.employee_name}/${item.card}, 没有薪资分配表数据！`
 										);
 										continue;
 									}
 
 									// 处理薪资分配规则
-									if (item.salarys.salary_type == 1 && salaryRule) {
+									if (item.salarys.salary_type === '1' && salaryRule) {
 										// 月薪类型，调整绩效工资
 										if (item.salarys.salary !== salaryRule.total_salary) {
 											salaryRule.performance_salary -= (salaryRule.total_salary -
@@ -1260,7 +1298,7 @@
 									}
 
 									// 获取其他数据
-									const key = `${item.employee_id}_${item.attendance_ym_key}`;
+									const key = `${item.card}_${item.attendance_ym_key}`;
 									item.frees = freeMap.get(key) || {};
 									item.gss = gsMap.get(key) || {};
 									item.sbs = sbMap.get(key) || {};
@@ -1280,7 +1318,7 @@
 
 								} catch (error) {
 									errors.push(
-										`处理员工 ${item.employees?.employee_name || item.employee_id} 失败: ${error.message}`
+										`处理员工 ${item.employee_name || item.card} 失败: ${error.message}`
 									);
 								}
 							}
@@ -1312,6 +1350,7 @@
 					vk.alert(`处理过程中发生错误: ${error.message}`, "系统错误", "确定");
 				}
 			},
+
 			// 批量获取薪资分配规则
 			async batchGetSalaryRules(totalSalaries) {
 				const salaryRulesMap = new Map();
@@ -1338,7 +1377,7 @@
 			},
 
 			// 批量获取放假补助
-			async batchGetFreeData(employeeIds, attendanceYmKeys) {
+			async batchGetFreeData(cards, attendanceYmKeys) {
 				const freeMap = new Map();
 
 				try {
@@ -1347,14 +1386,14 @@
 						url: 'admin/hrm/salary/sys/all/getfreeAll',
 						title: '获取放假补助中...',
 						data: {
-							employee_ids: employeeIds,
+							cards: cards,
 							attendance_ym_keys: attendanceYmKeys
 						},
 					});
 
 					if (res.code === 0 && res.rows) {
 						res.rows.forEach(item => {
-							const key = `${item.employee_id}_${item.attendance_ym}`;
+							const key = `${item.card}_${item.attendance_ym}`;
 							freeMap.set(key, item);
 						});
 					}
@@ -1367,7 +1406,7 @@
 			},
 
 			// 批量获取代扣个税
-			async batchGetGsData(employeeIds, attendanceYmKeys) {
+			async batchGetGsData(cards, attendanceYmKeys) {
 				const gsMap = new Map();
 
 				try {
@@ -1375,14 +1414,14 @@
 						url: 'admin/hrm/salary/sys/all/getgsAll',
 						title: '获取个税数据中...',
 						data: {
-							employee_ids: employeeIds,
+							cards: cards,
 							attendance_ym_keys: attendanceYmKeys
 						},
 					});
 
 					if (res.code === 0 && res.rows) {
 						res.rows.forEach(item => {
-							const key = `${item.employee_id}_${item.attendance_ym}`;
+							const key = `${item.card}_${item.attendance_ym}`;
 							gsMap.set(key, item);
 						});
 					}
@@ -1394,7 +1433,7 @@
 			},
 
 			// 批量获取个人社保
-			async batchGetSbData(employeeIds, attendanceYmKeys) {
+			async batchGetSbData(cards, attendanceYmKeys) {
 				const sbMap = new Map();
 
 				try {
@@ -1402,14 +1441,14 @@
 						url: 'admin/hrm/salary/sys/all/getsbdkAll',
 						title: '获取个人社保中...',
 						data: {
-							employee_ids: employeeIds,
+							cards: cards,
 							attendance_ym_keys: attendanceYmKeys
 						},
 					});
 
 					if (res.code === 0 && res.rows) {
 						res.rows.forEach(item => {
-							const key = `${item.employee_id}_${item.attendance_ym}`;
+							const key = `${item.card}_${item.attendance_ym}`;
 							sbMap.set(key, item);
 						});
 					}
@@ -1422,7 +1461,7 @@
 			},
 
 			// 批量获取公司社保
-			async batchGetCompanySbData(employeeIds, attendanceYmKeys) {
+			async batchGetCompanySbData(cards, attendanceYmKeys) {
 				const companySbMap = new Map();
 
 				try {
@@ -1430,14 +1469,14 @@
 						url: 'admin/hrm/salary/sys/all/getcomsbAll',
 						title: '获取公司社保中...',
 						data: {
-							employee_ids: employeeIds,
+							cards: cards,
 							attendance_ym_keys: attendanceYmKeys
 						},
 					});
 
 					if (res.code === 0 && res.rows) {
 						res.rows.forEach(item => {
-							const key = `${item.employee_id}_${item.attendance_ym}`;
+							const key = `${item.card}_${item.attendance_ym}`;
 							companySbMap.set(key, item);
 						});
 					}
@@ -1454,7 +1493,7 @@
 				// 综合工资
 				item.total_salary = item.salarys ? item.salarys.salary : 0;
 				// 休息类型
-				item.rest_type = item.employees ? item.employees.rest_type : '';
+				item.rest_type = item.rest_type || '';
 				// 工资类型
 				item.salary_type = item.salarys ? item.salarys.salary_type : '';
 				// 基本工资
@@ -1463,6 +1502,8 @@
 				item.performance_salary = item.bases ? item.bases.performance_salary : 0;
 				// 固定加班
 				item.overtime_fee = item.bases ? item.bases.overtime_fee : 0;
+				// 社保补偿金
+				item.penalty_fund = item.bases ? item.bases.penalty_fund : 0;
 				// 公积补偿金
 				item.housing_fund = item.bases ? item.bases.housing_fund : 0;
 				// 年度补偿金
@@ -1507,66 +1548,79 @@
 
 			// 计算工资
 			calculateSalary(item) {
-				// 工资总和=
+				// 根据定薪表来判断是 1:月、2:日、3:时薪，计算工资
+				// 基本工资、应勤天数、实际出勤
+				if ((item.salarys ? item.salarys.salary_type : item.salary_type) !== '1') {
+					item.base_salary = item.total_salary;
+					item.work_days = 1;
+				}
+
+				// 工资总和=								
 				let total = 0;
 				// 基本工资+
-				total += item.base_salary;
+				total += vk.pubfn.string2Number(item.base_salary || 0);
 				// 绩效工资+
-				total += item.performance_salary || 0;
+				total += vk.pubfn.string2Number(item.performance_salary || 0);
 				// 固定加班+
-				total += item.overtime_fee || 0;
+				total += vk.pubfn.string2Number(item.overtime_fee || 0);
 				// 社保补偿金+
-				total += item.penalty_fund || 0;
+				total += vk.pubfn.string2Number(item.penalty_fund || 0);
 				// 公积补偿金+
-				total += item.housing_fund || 0;
+				total += vk.pubfn.string2Number(item.housing_fund || 0);
 				// 年度补偿金+
-				total += item.annual_allowance || 0;
+				total += vk.pubfn.string2Number(item.annual_allowance || 0);
 				// 浮动奖励+
-				total += item.floating_bonus || 0;
+				total += vk.pubfn.string2Number(item.floating_bonus || 0);
 				// 保密费
-				total += item.confidentiality_fee || 0;
+				total += vk.pubfn.string2Number(item.confidentiality_fee || 0);
 
 				// 计算应发工资=工资总和/应勤天数*实际出勤
 				let grossSalary = total / item.work_days * item.real_days;
 				item.gross_salary = vk.pubfn.toDecimal(grossSalary, 2);
 
 				// 计算实发工资
-				// 应发工资
-				let realSalary = item.gross_salary || 0;
+				let realSalary = 0;
+				// 实发工资				
+				realSalary += vk.pubfn.string2Number(item.gross_salary || 0);
 
 				// 加项
 				// 加班费
-				realSalary += item.overtime_cost || 0;
+				realSalary += vk.pubfn.string2Number(item.overtime_cost || 0);
 				// 放假补助
-				realSalary += item.free_cost || 0;
+				realSalary += vk.pubfn.string2Number(item.free_cost || 0);
 				// 补助
-				realSalary += item.grant || 0;
+				realSalary += vk.pubfn.string2Number(item.grant || 0);
 				// 介绍费
-				realSalary += item.agency_fee || 0;
+				realSalary += vk.pubfn.string2Number(item.agency_fee || 0);
 				// 其它
-				realSalary += item.other_cost || 0;
+				realSalary += vk.pubfn.string2Number(item.other_cost || 0);
 
 				// 减项
 				// 水电
-				realSalary -= item.we_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.we_cost || 0);
 				// 工衣
-				realSalary -= item.clothes_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.clothes_cost || 0);
 				// 迟到早退
-				realSalary -= item.earlytime_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.earlytime_cost || 0);
 				// 未打卡
-				realSalary -= item.missed_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.missed_cost || 0);
 				// 借款
-				realSalary -= item.loan_cost || 0;
+				realSalary -= vk.pubfn.string2Number(item.loan_cost || 0);
 				// 本月社保 				
-				realSalary -= item.this_month_sb || 0;
+				realSalary -= vk.pubfn.string2Number(item.this_month_sb || 0);
 				// 本月代扣部份
-				realSalary -= item.this_month_dk || 0;
+				realSalary -= vk.pubfn.string2Number(item.this_month_dk || 0);
 
 				// 代扣个税
-				realSalary -= item.dkgs || 0;
+				realSalary -= vk.pubfn.string2Number(item.dkgs || 0);
+
+				// 财务审核状态
+				item.enable_fd1 = false;
+				item.enable_fd2 = false;
 
 				// 实发工资
 				item.real_salary = vk.pubfn.toDecimal(realSalary, 2);
+				console.log("item:", item);
 
 				return item;
 			},
@@ -1664,45 +1718,34 @@
 					},
 				});
 			},
+			async batchApprove(enable_fd1, enable_fd2) {
+				try {
+					let res = await vk.callFunction({
+						url: 'admin/hrm/salary/sys/all/updateAll',
+						title: '请求中...',
+						data: {
+							items: this.table1.multipleSelection,
+							enable_fd1,
+							enable_fd2
+						}
+					})
+					vk.alert('批量审核通过成功', '确定', () => {
+						this.refresh();
+					});
+				} catch (error) {
+					vk.alert('操作异常：' + error.message);
+				} finally {
+					uni.hideLoading();
+				}
+			},
 			// 监听 - 批量操作的按钮点击事件
 			batchBtn(index) {
 				switch (index) {
 					case 1:
-						this.table1.multipleSelection.forEach(async (e) => {
-							let data = await vk.callFunction({
-								url: 'admin/hrm/salary/sys/update',
-								title: '请求中...',
-								data: {
-									_id: e._id,
-									card: e.card,
-									attendance_ym_key: e.attendance_ym_key,
-									enable_fd1: true
-								}
-							})
-							if (data.code == 0) vk.alert("批量审核通过成功", "确定",
-								() => {
-									this.refresh()
-								})
-						})
-
+						this.batchApprove(true, true);
 						break;
 					case 2:
-						this.table1.multipleSelection.forEach(async (e) => {
-							let data = await vk.callFunction({
-								url: 'admin/hrm/salary/sys/update',
-								title: '请求中...',
-								data: {
-									_id: e._id,
-									card: e.card,
-									attendance_ym_key: e.attendance_ym_key,
-									enable_fd1: false
-								}
-							})
-							if (data.code == 0) vk.alert("批量审核未通过成功", "确定",
-								() => {
-									this.refresh()
-								})
-						})
+						this.batchApprove(false, false);
 						break;
 					default:
 						break;
@@ -1936,11 +1979,11 @@
 							"title": "综合",
 							"type": "number"
 						},
-						{
-							"key": "rest_type",
-							"title": "制",
-							"type": "text",
-						},
+						// {
+						// 	"key": "rest_type",
+						// 	"title": "制",
+						// 	"type": "text",
+						// },
 						{
 							"key": "attendance_ym_key",
 							"title": "月份",

@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["attendance_ym", "employee_id"],
+	"required": ["attendance_ym", "card"],
 	"permission": {
 		"read": false,
 		"create": false,
@@ -23,6 +23,12 @@
 			"foreignKey": "hrm-employees.employee_id",
 			"trim": "both"
 		},
+		"card": {
+			"title": "身份证号码",
+			"bsonType": "string",
+			"description": "身份证号码唯一标识，不可修改，不允许重复",
+			"trim": "both"
+		},
 		"reward_cost": {
 			"title": "奖励",
 			"bsonType": "int",
@@ -32,7 +38,7 @@
 			"title": "惩罚",
 			"bsonType": "int",
 			"description": "惩罚"
-		},		
+		},
 		"agency_fee": {
 			"title": "介绍费",
 			"bsonType": "number",

@@ -27,7 +27,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			employee_id,
+			card,
 			attendance_ym_key
 		} = data;
 		let res = {
@@ -40,7 +40,7 @@ module.exports = {
 			dbName,
 			data,
 			whereJson: {
-				empids: employee_id,//empids包含employee_id的值
+				cards: card,//cards包含card的值
 				attendance_ym: attendance_ym_key
 			},
 			sortArr: [{
@@ -55,10 +55,10 @@ module.exports = {
 			}],
 			// 副表
 			foreignDB: [{
-				dbName: "hrm-employees",
-				localKey: "empids",
+				dbName: "hrm-attendance-detail",
+				localKey: "cards",
 				localKeyType: "array",
-				foreignKey: "employee_id",
+				foreignKey: "card",
 				as: "employees"
 			}, {
 				dbName: "hrm-dorm",
@@ -74,6 +74,7 @@ module.exports = {
 				limit: 1
 			}]
 		});
+		console.log("card:",card);
 		return res;
 	}
 

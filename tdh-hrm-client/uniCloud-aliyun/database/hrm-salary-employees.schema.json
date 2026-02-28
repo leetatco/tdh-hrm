@@ -42,7 +42,7 @@
 		"confirm_id": {
 			"bsonType": "string",
 			"title": "确认人",
-			"foreignKey": "hr-employees.employee_id",
+			"foreignKey": "hrm-attendance-detail.card",
 			"description": "确认人",
 			"trim": "both"
 		},

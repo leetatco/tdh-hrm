@@ -9,18 +9,14 @@
 
 		<!-- 自定义按钮区域开始 -->
 		<view>
-			<el-row>
-				<!-- <el-button type="success" size="small" icon="el-icon-circle-plus-outline"
-					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')" @click="addBtn">添加</el-button> -->
-				<!-- <el-button type="success" size="small" icon="el-icon-circle-plus-outline"
-					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')"
-					@click="autoBtn">自动生成月考勤表</el-button> -->
+			<el-row>				
 				<el-button type="primary" size="small" icon="el-icon-edit-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-export')" @click="exportExcelAll"> 导出全部
 				</el-button>
 				<!-- 批量操作 -->
-				<el-dropdown v-if="table1.multipleSelection && $hasRole('admin')" :split-button="false" trigger="click"
-					@command="batchBtn">
+				<el-dropdown
+					v-if="table1.multipleSelection && ($hasRole('admin') || $hasPermission('hrm-attendance-add'))"
+					:split-button="false" trigger="click" @command="batchBtn">
 					<el-button type="danger" size="small" style="margin-left: 20rpx;"
 						:disabled="table1.multipleSelection.length === 0">
 						批量审核<i class="el-icon-arrow-down el-icon--right"></i>
@@ -88,7 +84,7 @@
 							mode: 'detail_auto',
 							title: '详细',
 							show: (item) => {
-								return this.$hasRole('admin')
+								return this.$hasRole('admin') || this.$hasPermission('hrm-attendance-view')
 							}
 						},
 						{
@@ -144,7 +140,7 @@
 						},
 						{
 							"key": "position_name",
-							"title": "职位",
+							"title": "岗位",
 							"type": "text",
 							"width": colWidth - 100
 						},
@@ -172,8 +168,24 @@
 						{
 							"key": "real_days",
 							"title": "实际天数",
+							"type": "html",
+							"width": colWidth - 100,
+							formatter: function(val, row, column, index) {
+								if (row.salary_type == 1) return `<text>${val}</text>`;
+								if (row.salary_type == 2) return `<text>${val}天</text>`;
+								if (row.salary_type == 3) return `<text>${val}H</text>`;
+							}
+						},
+						{
+							"key": "salary_type",
+							"title": "工资类型",
 							"type": "number",
-							"width": colWidth - 100
+							"width": colWidth - 100,
+							formatter: function(val, row, column, index) {
+								if (row.salary_type == 1) return '月薪';
+								if (row.salary_type == 2) return '日薪';
+								if (row.salary_type == 3) return '时薪';
+							}
 						},
 						{
 							"key": "typhoon_duty",
@@ -190,6 +202,12 @@
 						{
 							"key": "overtime_hours",
 							"title": "加班小时",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "overtime_cost",
+							"title": "加班费",
 							"type": "number",
 							"width": colWidth - 100
 						},
@@ -218,11 +236,76 @@
 							"width": colWidth - 100
 						},
 						{
+							"key": "share_cost",
+							"title": "水电费用",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "clothes_cost",
+							"title": "工衣费用",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "reward_cost",
+							"title": "奖励",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "punish_cost",
+							"title": "惩罚",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "agency_fee",
+							"title": "介绍费",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "other_cost",
+							"title": "其它费用",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
 							"key": "user_confirmed",
 							"title": "本人确认",
 							"type": "text",
 							"width": colWidth - 100
-						},						
+						},
+						{
+							key: "enable_hr",
+							title: "考勤审核",
+							type: "switch",
+							activeValue: true,
+							inactiveValue: false,
+							width: colWidth - 100,
+							watch: (res) => {
+								let {
+									value,
+									row,
+									change
+								} = res;
+								vk.callFunction({
+									url: "admin/hrm/attendance/sys/approve/update",
+									title: value ? "通过中..." : "未通过中...",
+									data: {
+										_id: row._id,
+										attendance_ym: row.attendance_ym,
+										card: row.card,
+										department_name: row.department_name,
+										enable_hr: value
+									},
+									success: data => {
+										this.refresh();
+									}
+								});
+							}
+						},
 						{
 							"key": "comment",
 							"title": "备注",
@@ -408,10 +491,34 @@
 								"width": colWidth
 							},
 							{
+								"key": "salary_type",
+								"title": "工资类型",
+								"type": "select",
+								"width": colWidth,
+								"data": [{
+									"value": 1,
+									"label": "月薪"
+								}, {
+									"value": 2,
+									"label": "日薪"
+								}, {
+									"value": 3,
+									"label": "时薪"
+								}]
+							},
+							{
 								"key": "overtime_hours",
 								"title": "加班小时",
 								"type": "number",
 								"precision": 1,
+								"width": colWidth
+							},
+							{
+								"key": "overtime_cost",
+								"title": "加班费",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
 								"width": colWidth
 							},
 							{
@@ -445,6 +552,54 @@
 								"width": colWidth
 							},
 							{
+								"key": "share_cost",
+								"title": "水电费用",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
+								"width": colWidth
+							},
+							{
+								"key": "clothes_cost",
+								"title": "工衣费用",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
+								"width": colWidth
+							},
+							{
+								"key": "reward_cost",
+								"title": "奖励",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
+								"width": colWidth
+							},
+							{
+								"key": "punish_cost",
+								"title": "惩罚",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
+								"width": colWidth
+							},
+							{
+								"key": "agency_fee",
+								"title": "介绍费",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
+								"width": colWidth - 100
+							},
+							{
+								"key": "other_cost",
+								"title": "其它费用",
+								"type": "number",
+								"disabled": true,
+								"precision": 0,
+								"width": colWidth
+							},
+							{
 								"key": "enable_hr",
 								"title": "考勤审核",
 								"type": "switch",
@@ -470,7 +625,7 @@
 								message: "该项不能为空",
 								trigger: ['change']
 							}],
-							employee_id: [{
+							card: [{
 								required: true,
 								message: "该项不能为空",
 								// validator: async (rule, value, callback) => {
@@ -478,11 +633,11 @@
 								// },
 								trigger: ['change']
 							}],
-							work_days: [{
-								required: true,
-								message: "该项不能为空",
-								trigger: ['change']
-							}],
+							// work_days: [{
+							// 	required: true,
+							// 	message: "该项不能为空",
+							// 	trigger: ['change']
+							// }],
 							real_days: [{
 								required: true,
 								message: "该项不能为空",
@@ -573,7 +728,7 @@
 						},
 						{
 							"key": "position_name",
-							"title": "职位",
+							"title": "岗位",
 							"type": "text"
 						},
 						{
@@ -597,7 +752,22 @@
 						{
 							"key": "real_days",
 							"title": "实际天数",
-							"type": "number"
+							"type": "number",
+							formatter: function(val, row, column, index) {
+								if (row.salary_type == 1) return `<text>${val}</text>`;
+								if (row.salary_type == 2) return `<text>${val}天</text>`;
+								if (row.salary_type == 3) return `<text>${val}H</text>`;
+							}
+						},
+						{
+							"key": "salary_type",
+							"title": "工资类型",
+							"type": "number",
+							formatter: function(val, row, column, index) {
+								if (val == 1) return '月薪';
+								if (val == 2) return '日薪';
+								if (val == 3) return '时薪';
+							}
 						},
 						{
 							"key": "typhoon_duty",
@@ -612,6 +782,11 @@
 						{
 							"key": "overtime_hours",
 							"title": "加班小时",
+							"type": "number"
+						},
+						{
+							"key": "overtime_cost",
+							"title": "加班费",
 							"type": "number"
 						},
 						{
@@ -632,6 +807,36 @@
 						{
 							"key": "missed_cost",
 							"title": "未打卡费",
+							"type": "number"
+						},
+						{
+							"key": "share_cost",
+							"title": "水电费用",
+							"type": "number"
+						},
+						{
+							"key": "clothes_cost",
+							"title": "工衣费用",
+							"type": "number"
+						},
+						{
+							"key": "reward_cost",
+							"title": "奖励",
+							"type": "number"
+						},
+						{
+							"key": "punish_cost",
+							"title": "惩罚",
+							"type": "number"
+						},
+						{
+							"key": "agency_fee",
+							"title": "介绍费",
+							"type": "number",
+						},
+						{
+							"key": "other_cost",
+							"title": "其它费用",
 							"type": "number"
 						},
 						{
@@ -703,40 +908,40 @@
 					url: 'admin/hrm/salary/sys/overtime/getList',
 					title: '请求中...',
 					data: {
-						employee_id: 'common'
+						card: 'common'
 					}
 				});
 
 				if (ll_data.total == 0) return vk.alert('请设定迟/早退打卡规则！');
 				if (com_data.total == 0) return vk.alert('请设通用加班规则！');
 
-				// let employee_id = this.form1.data.employee_id || 0;
+				let card = this.form1.data.card || 0;
 				let overtime_hours = this.form1.data.overtime_hours || 0;
 				let earlytime_hours = this.form1.data.earlytime_hours || 0;
 				let missed_count = this.form1.data.missed_count || 0;
 
-				// if (employee_id == 0) return vk.alert('请选择员工！');
+				if (card == 0) return vk.alert('请选择员工！');
 
 				//加班费
 				if (overtime_hours !== 0) {
 					//特殊人员加班费用
-					// let emp_data = await vk.callFunction({
-					// 	url: 'admin/hrm/salary/sys/overtime/getList',
-					// 	title: '请求中...',
-					// 	data: {
-					// 		employee_id
-					// 	}
-					// })
-					// if (emp_data.total > 0) {
-					// 	let value = overtime_hours * emp_data.rows[0].overtime_cost;
-					// 	this.$set(this.form1.data, 'overtime_cost', value);
-					// } else {
-					// 	let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
-					// 	this.$set(this.form1.data, 'overtime_cost', value);
-					// }
+					let emp_data = await vk.callFunction({
+						url: 'admin/hrm/salary/sys/overtime/getList',
+						title: '请求中...',
+						data: {
+							card
+						}
+					})
+					if (emp_data.total > 0) {
+						let value = overtime_hours * emp_data.rows[0].overtime_cost;
+						this.$set(this.form1.data, 'overtime_cost', value);
+					} else {
+						let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
+						this.$set(this.form1.data, 'overtime_cost', value);
+					}
 
-					let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
-					this.$set(this.form1.data, 'overtime_cost', value);
+					// let value = overtime_hours * (com_data.rows[0].overtime_cost || 20);
+					// this.$set(this.form1.data, 'overtime_cost', value);
 
 				}
 
@@ -791,24 +996,30 @@
 							const employeeCards = [];
 							const attendanceYmKeys = new Set();
 
+							//处理离职月份
 							for (let row of resDetails.rows) {
 								employeeCards.push(row.card);
+								row.resign_month = "";
+								if (vk.pubfn.isNotNull(row.resign_date)) {
+									const match = row.resign_date.match(/\.(\d+)/);
+									row.resign_month = match[1] || "";
+								}
 
 								// 计算attendance_ym_key
-								// let attendance_ym_key;
-								// if (vk.pubfn.isNotNull(row.resign_month)) {
-								// 	if (nowym.split('-')[1] != row.resign_month) {
-								// 		let rm = row.resign_month > 9 ? row.resign_month :
-								// 			`0${row.resign_month}`;
-								// 		attendance_ym_key = `${nowy}-${rm}`;
-								// 	} else {
-								// 		attendance_ym_key = row.attendance_ym;
-								// 	}
-								// } else {
-								// 	attendance_ym_key = row.attendance_ym;
-								// }
+								let attendance_ym_key;
+								if (vk.pubfn.isNotNull(row.resign_month)) {
+									if (nowym.split('-')[1] != row.resign_month) {
+										let rm = row.resign_month > 9 ? row.resign_month :
+											`0${row.resign_month}`;
+										attendance_ym_key = `${nowy}-${rm}`;
+									} else {
+										attendance_ym_key = row.attendance_ym;
+									}
+								} else {
+									attendance_ym_key = row.attendance_ym;
+								}
 
-								row.attendance_ym_key = row.attendance_ym;
+								row.attendance_ym_key = attendance_ym_key;
 
 								// 添加到集合（自动去重）
 								attendanceYmKeys.add(row.attendance_ym_key);
@@ -889,12 +1100,11 @@
 							// 处理水电费
 							if (res.data.we && res.data.we.length > 0) {
 								res.data.we.forEach(item => {
-									const key = `${item.employee_id}_${item.attendance_ym}`;
+									const key = `${item.card}_${item.attendance_ym}`;
 									const existingData = allCostsMap.get(key) || {};
 									allCostsMap.set(key, {
 										...existingData,
-										share_cost: (existingData.share_cost || 0) + (item
-											.share_cost || 0)
+										share_cost: item.share_cost || 0
 									});
 								});
 							}
@@ -902,7 +1112,7 @@
 							// 处理工衣费
 							if (res.data.clothes && res.data.clothes.length > 0) {
 								res.data.clothes.forEach(item => {
-									const key = `${item.employee_id}_${item.attendance_ym}`;
+									const key = `${item.card}_${item.attendance_ym}`;
 									const existingData = allCostsMap.get(key) || {};
 									allCostsMap.set(key, {
 										...existingData,
@@ -914,7 +1124,7 @@
 							// 处理人事费用
 							if (res.data.cost && res.data.cost.length > 0) {
 								res.data.cost.forEach(item => {
-									const key = `${item.employee_id}_${item.attendance_ym}`;
+									const key = `${item.card}_${item.attendance_ym}`;
 									const existingData = allCostsMap.get(key) || {};
 									allCostsMap.set(key, {
 										...existingData,
@@ -957,7 +1167,7 @@
 						url: 'admin/hrm/salary/sys/overtime/getList',
 						title: '获取规则中...',
 						data: {
-							employee_id: 'common'
+							card: 'common'
 						}
 					});
 
@@ -1000,9 +1210,9 @@
 						data: {
 							pageIndex: 1,
 							pageSize: -1, // 足够大，确保能获取所有特殊规则
-							// 查询条件：employee_id不是'common'，并且在我们需要的员工列表中
+							// 查询条件：card不是'common'，并且在我们需要的员工列表中
 							whereJson: {
-								employee_id: {
+								card: {
 									$ne: 'common',
 									$in: employeeCards
 								}
@@ -1013,9 +1223,9 @@
 					if (res.code === 0 && res.rows && res.rows.length > 0) {
 						// 建立员工ID到特殊规则的映射
 						res.rows.forEach(item => {
-							// 确保employee_id存在且不是通用规则
-							if (item.employee_id && item.employee_id !== 'common') {
-								specialRulesMap.set(item.employee_id, item);
+							// 确保card存在且不是通用规则
+							if (item.card && item.card !== 'common') {
+								specialRulesMap.set(item.card, item);
 							}
 						});
 
@@ -1039,13 +1249,22 @@
 							throw new Error('无法确定考勤月份');
 						}
 
-						const key = `${row.employee_id}_${attendance_ym_key}`;
+						const key = `${row.card}_${attendance_ym_key}`;
 						const costData = allCostsMap.get(key) || {};
+
+						//处理工资类型
+						let salary = vk.myfn.parseSalary(row.real_days)
+						if (salary) {
+							row.real_days = salary.number;
+							row.salary_type = salary.type;
+						}
 
 						//月薪，实际天数>全勤天数，实际天数=全勤天数
 						if (vk.pubfn.isNotNull(row.work_days) && vk.pubfn.isNotNull(row.real_days)) {
 							row.real_days = row.real_days > row.work_days ? row.work_days : row.real_days
 						}
+
+
 
 						// 设置费用数据
 						row.share_cost = costData.share_cost || 0;
@@ -1080,7 +1299,7 @@
 					specialOvertimeMap
 				} = rules;
 				const {
-					employee_id,
+					card,
 					overtime_hours = 0,
 					earlytime_hours = 0,
 					missed_count = 0
@@ -1090,8 +1309,8 @@
 				let overtime_cost = 0;
 				if (overtime_hours !== 0) {
 					// 检查是否有特殊规则
-					if (specialOvertimeMap.has(employee_id)) {
-						const specialRule = specialOvertimeMap.get(employee_id);
+					if (specialOvertimeMap.has(card)) {
+						const specialRule = specialOvertimeMap.get(card);
 						overtime_cost = overtime_hours * (specialRule.overtime_cost || 20);
 					} else {
 						// 使用通用规则

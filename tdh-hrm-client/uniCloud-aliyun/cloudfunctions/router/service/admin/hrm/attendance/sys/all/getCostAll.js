@@ -15,7 +15,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			employee_id,
+			card,
 			attendance_ym_key
 		} = data;
 
@@ -37,13 +37,13 @@ module.exports = {
 		}
 
 		// 将参数转换为数组格式
-		const employeeIds = Array.isArray(employee_id) ? employee_id : (employee_id ? [employee_id] : []);
+		const cards = Array.isArray(card) ? card : (card ? [card] : []);
 		const attendanceYmKeys = Array.isArray(attendance_ym_key) ? attendance_ym_key : [attendance_ym_key];
 
 		try {
-			// 1. 查询水电费（需要特殊处理，因为empids是数组）
-			if (employeeIds.length > 0 && attendanceYmKeys.length > 0) {
-				// 由于empids是数组，需要使用$elemMatch或$in来查询
+			// 1. 查询水电费（需要特殊处理，因为cards是数组）
+			if (cards.length > 0 && attendanceYmKeys.length > 0) {
+				// 由于cards是数组，需要使用$elemMatch或$in来查询
 				const weRes = await vk.baseDao.getTableData({
 					dbName: "hrm-salary-we",
 					data: {
@@ -52,11 +52,10 @@ module.exports = {
 						...data
 					},
 					whereJson: {
-						empids: {
-							$elemMatch: {
-								$in: employeeIds
-							}
-						}, // empids数组中包含任意一个employee_id
+						cards: {
+							$in: cards
+						},
+						// cards数组中包含任意一个card
 						attendance_ym: {
 							$in: attendanceYmKeys
 						}
@@ -69,20 +68,20 @@ module.exports = {
 
 					weRes.rows.forEach(record => {
 						const {
-							empids,
+							cards,
 							attendance_ym,
 							share_cost
 						} = record;
 						const shareCostPerPerson = share_cost;
 
 						// 遍历该记录中的所有员工ID
-						empids.forEach(empId => {
-							// 只处理在请求参数中的员工ID
-							if (employeeIds.includes(empId)) {
-								const key = `${empId}_${attendance_ym}`;
+						cards.forEach(card => {
+							// 只处理在请求参数中的员工card
+							if (cards.includes(card)) {
+								const key = `${card}_${attendance_ym}`;
 								if (!groupedWe[key]) {
 									groupedWe[key] = {
-										employee_id: empId,
+										card: card,
 										attendance_ym: attendance_ym,
 										share_cost: 0
 									};
@@ -98,7 +97,7 @@ module.exports = {
 			}
 
 			// 2. 查询工衣费
-			if (employeeIds.length > 0 && attendanceYmKeys.length > 0) {
+			if (cards.length > 0 && attendanceYmKeys.length > 0) {
 				const clothesRes = await vk.baseDao.getTableData({
 					dbName: "hrm-salary-clothes",
 					data: {
@@ -107,17 +106,18 @@ module.exports = {
 						...data
 					},
 					whereJson: {
-						employee_id: {
-							$in: employeeIds
+						card: {
+							$in: cards
 						},
 						attendance_ym: {
 							$in: attendanceYmKeys
 						}
 					},
 					foreignDB: [{
-						dbName: "hrm-employees",
-						localKey: "employee_id",
-						foreignKey: "employee_id",
+						dbName: "hrm-attendance-detail",
+						localKey: "card",
+						localKeyType: "array",
+						foreignKey: "card",
 						as: "employees",
 						limit: 1
 					}, {
@@ -135,7 +135,7 @@ module.exports = {
 			}
 
 			// 3. 查询人事费用
-			if (employeeIds.length > 0 && attendanceYmKeys.length > 0) {
+			if (cards.length > 0 && attendanceYmKeys.length > 0) {
 				const costRes = await vk.baseDao.getTableData({
 					dbName: "hrm-salary-cost",
 					data: {
@@ -144,17 +144,18 @@ module.exports = {
 						...data
 					},
 					whereJson: {
-						employee_id: {
-							$in: employeeIds
+						card: {
+							$in: cards
 						},
 						attendance_ym: {
 							$in: attendanceYmKeys
 						}
 					},
 					foreignDB: [{
-						dbName: "hrm-employees",
-						localKey: "employee_id",
-						foreignKey: "employee_id",
+						dbName: "hrm-attendance-detail",
+						localKey: "card",
+						localKeyType: "array",
+						foreignKey: "card",
 						as: "employees",
 						limit: 1
 					}, {

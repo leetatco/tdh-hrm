@@ -37,31 +37,19 @@ module.exports = {
 		res = await vk.baseDao.getTableData({
 			dbName,
 			data,
-			sortArr: [{ name: "department_id",type: "asc" },{ name: "employee_id",type: "asc" }],
 			// 副表
 			foreignDB: [{
-				dbName: "hrm-employees",
-				localKey: "employee_id",
-				foreignKey: "employee_id",
+				dbName: "hrm-attendance-detail",
+				localKey: "card",
+				localKeyType: "array",
+				foreignKey: "card",
 				as: "employees",
-				limit: 1,
-				foreignDB: [{
-					dbName: "hrm-departments",
-					localKey: "department_id",
-					foreignKey: "department_id",
-					as: "departments",
-					limit: 1
-				}, {
-					dbName: "hrm-positions",
-					localKey: "position_id",
-					foreignKey: "position_id",
-					as: "positions",
-					limit: 1
-				}]
+				limit: 1
 			}, {
-				dbName: "hrm-employees",
+				dbName: "hrm-attendance-detail",
 				localKey: "confirm_id",
-				foreignKey: "employee_id",
+				localKeyType: "array",
+				foreignKey: "card",
 				as: "confirms",
 				limit: 1
 			}, {
@@ -70,7 +58,7 @@ module.exports = {
 				foreignKey: "_id",
 				as: "users",
 				limit: 1
-			}]			 
+			}]
 		});
 		return res;
 	}

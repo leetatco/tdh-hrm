@@ -17,10 +17,10 @@ module.exports = {
 		// 获取前端传过来的参数
 		let {
 			attendance_ym,
-			employee_id,			
+			card,			
 			reward_cost,
 			punish_cost,
-			// grant,
+			grant,
 			agency_fee,
 			other_cost,
 			comment,
@@ -34,7 +34,7 @@ module.exports = {
 							attendance_ym
 						},
 						_.or([{
-							employee_id
+							card
 						}])
 					])
 				});
@@ -52,10 +52,10 @@ module.exports = {
 			dbName,
 			dataJson: {
 				attendance_ym,
-				employee_id,				
+				card,				
 				reward_cost,
 				punish_cost,
-				// grant,
+				grant,
 				agency_fee,
 				other_cost,
 				comment,

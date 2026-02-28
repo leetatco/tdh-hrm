@@ -33,7 +33,7 @@ module.exports = {
 		let {
 			_id,
 			attendance_ym,
-			empids,
+			cards,
 			dorm_id,
 			last_month_water,
 			current_month_water,
@@ -79,7 +79,7 @@ module.exports = {
 			id: _id,
 			dataJson: {
 				attendance_ym,
-				empids,
+				cards,
 				dorm_id,
 				last_month_water,
 				current_month_water,

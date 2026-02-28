@@ -16,6 +16,7 @@ module.exports = {
 		// 获取前端传过来的参数
 		let {
 			employee_id,
+			card,
 			overtime_cost,
 			comment,
 			update_date,
@@ -31,6 +32,7 @@ module.exports = {
 			dbName,
 			dataJson: {
 				employee_id,
+				card,
 				overtime_cost,
 				comment,
 				update_id: uid,

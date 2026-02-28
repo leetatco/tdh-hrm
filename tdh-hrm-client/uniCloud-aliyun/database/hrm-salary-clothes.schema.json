@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["attendance_ym", "employee_id"],
+	"required": ["attendance_ym", "card"],
 	"permission": {
 		"read": false,
 		"create": false,
@@ -15,6 +15,12 @@
 			"title": "考勤年月",
 			"bsonType": "date",
 			"description": "考勤年月"
+		},
+		"card": {
+			"title": "身份证号码",
+			"bsonType": "string",
+			"description": "身份证号码唯一标识，不可修改，不允许重复",
+			"trim": "both"
 		},
 		"employee_id": {
 			"title": "员工工号",

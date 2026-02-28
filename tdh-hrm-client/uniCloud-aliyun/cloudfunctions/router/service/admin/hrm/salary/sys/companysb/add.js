@@ -32,7 +32,7 @@ module.exports = {
 		// 获取前端传过来的参数
 		let {
 			attendance_ym,
-			employee_id,
+			card,
 			amount,
 			provident_fund,
 			comment,
@@ -44,7 +44,7 @@ module.exports = {
 			dbName,
 			whereJson: {
 				attendance_ym,
-				employee_id
+				card
 			}
 		});
 		if (checkRes) {
@@ -59,7 +59,7 @@ module.exports = {
 			dbName,
 			dataJson: {
 				attendance_ym,
-				employee_id,
+				card,
 				amount,
 				provident_fund,
 				comment,

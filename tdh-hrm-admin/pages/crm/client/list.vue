@@ -723,55 +723,58 @@
 				this.form1.props.title = '添加客户资料';
 				this.form1.props.show = true;
 			},
-			// 显示添加页面
+			// 显示考勤
+			//白：12590 赵：10228
 			async viewBtn() {
 				let data = await vk.callFunction({
 					url: 'admin/crm/client/sys/editkq',
 					title: '请求中...',
 					data: {
 						sql: 'select * from tdh_oa.tdh_kqrecord where xuhao=? and kqdate=? ',
-						params: ['12590', '2026-02-14']
+						params: ['12590', '2026-02-26']
 					}
 				});
 				console.log(data.rows)
 			},
-			// 显示添加页面
+			// 修改考勤
 			async editBtn() {
 				let data = await vk.callFunction({
 					url: 'admin/crm/client/sys/editkq',
 					title: '请求中...',
 					data: {
-						sql: "UPDATE tdh_oa.tdh_kqrecord SET myhour = 8.00, time1='18:20:45,13:21:51,12:51:51,08:16:46', shaitime='08:16:46-12:51:50 13:21:51-18:20:45' WHERE xuhao=? and kqdate=?",
+						sql: "UPDATE tdh_oa.tdh_kqrecord SET myhour = 8.00, time1='18:06:53,13:23:30,12:14:26,08:12:36', shaitime='08:12:36-12:14:26  13:23:30-18:06:53', latetime=0 WHERE xuhao=? and kqdate=?",
 						// sql: 'select * from tdh_oa.tdh_kqrecord where xuhao=? and kqdate=? ',
-						params: ['12590', '2026-02-14']
+						params: ['12590', '2026-02-26']
 					}
 				});
 				console.log(data.rows)
 			},
-			// 显示添加页面
+			// 显示原始打卡
 			async viewRecordBtn() {
 				let data = await vk.callFunction({
 					url: 'admin/crm/client/sys/editkq',
 					title: '请求中...',
 					data: {
 						sql: 'select * from tdh_oa.tdh_signrecord where admin_id=? and sign_date=? ',
-						params: ['12590', '2026-02-14']
+						params: ['12590', '2026-02-26']
 					}
 				});
 				console.log(data.rows)
 			},
-			// 显示添加页面
+			// 修改原始打卡
 			async editRecordBtn() {
 				let data = await vk.callFunction({
 					url: 'admin/crm/client/sys/editkq',
 					title: '请求中...',
 					data: {
-						sql: "UPDATE tdh_oa.tdh_signrecord SET sign_time = 1771044711, create_time=1771044711 WHERE id=?",
-						params: ['1055310']
+						sql: "UPDATE tdh_oa.tdh_signrecord SET sign_time = 1772079266, create_time=1772079266 WHERE id=?",
+						// sql: "UPDATE tdh_oa.tdh_signrecord SET lat = '22.64429600', lng='113.83891500' WHERE id=?",					
+						params: ['1057046']
 					}
 				});
 				console.log(data.rows)
 			},
+			//增加原始打卡
 			async addRecordBtn() {
 				let data = await vk.callFunction({
 					url: 'admin/crm/client/sys/editkq',

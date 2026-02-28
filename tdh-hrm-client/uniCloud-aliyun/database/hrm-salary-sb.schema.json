@@ -23,6 +23,12 @@
 			"foreignKey": "hrm-employees.employee_id",
 			"trim": "both"
 		},
+		"card": {
+			"title": "身份证号码",
+			"bsonType": "string",
+			"description": "身份证号码唯一标识，不可修改，不允许重复",
+			"trim": "both"
+		},
 		"last_month_sb": {
 			"title": "上月社保",
 			"bsonType": "double",

@@ -26,8 +26,8 @@ module.exports = {
 			_
 		} = util;
 		let {
-			uid,			
-			employee_id,
+			uid,
+			card,
 			attendance_ym_key
 		} = data;
 		let res = {
@@ -40,14 +40,15 @@ module.exports = {
 			dbName,
 			data,
 			whereJson: {
-				employee_id,
+				card,
 				attendance_ym: attendance_ym_key
 			},
 			// 副表
 			foreignDB: [{
-				dbName: "hrm-employees",
-				localKey: "employee_id",
-				foreignKey: "employee_id",
+				dbName: "hrm-attendance-detail",
+				localKey: "card",
+				localKeyType: "array",
+				foreignKey: "card",
 				as: "employees",
 				limit: 1
 			}, {

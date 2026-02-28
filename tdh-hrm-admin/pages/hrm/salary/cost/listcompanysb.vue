@@ -122,19 +122,13 @@
 							"width": colWidth
 						},
 						{
-							"key": "employee_id",
-							"title": "员工工号",
-							"type": "text",
-							"width": colWidth - 100
-						},
-						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",
 							"type": "text",
 							"width": colWidth - 100
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text",
 							"width": colWidth
@@ -196,19 +190,14 @@
 							"mode": "="
 						},
 						{
-							key: "employee_id",
+							key: "card",
 							title: "",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
+							oneLine: true,
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -218,28 +207,22 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: colWidth - 50,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
-									width: colWidth - 50,
+									width: 150,
 									mode: "%%"
-								}, {
+								},
+								{
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									width: colWidth,
+									width: 150,
 									mode: "%%"
 								}
 
@@ -267,19 +250,14 @@
 								"width": colWidth
 							},
 							{
-								key: "employee_id",
-								title: "",
+								key: "card",
+								title: "姓名",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
+								oneLine: true,
 								multiple: false,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -289,28 +267,22 @@
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										nameKey: true
+										idKey: true
 
 									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
-										width: colWidth - 50,
+										width: 150,
 										mode: "%%"
-									}, {
+									},
+									{
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										width: colWidth,
+										width: 150,
 										mode: "%%"
 									}
 
@@ -344,7 +316,7 @@
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
 							}],
-							employee_id: [{
+							card: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
@@ -405,10 +377,6 @@
 						"title": "身份证号码",
 						"type": "text"
 					},
-					employee_id: {
-						"title": "员工工号",
-						"type": "text"
-					},
 					amount: {
 						"title": "公司社保",
 						"precision": 2,
@@ -452,7 +420,7 @@
 						}
 
 						// 3. 批量检查人员基本资料
-						vk.toast('检查人员基本资料中...');
+						/*vk.toast('检查人员基本资料中...');
 						const checkRes = await vk.callFunction({
 							url: 'admin/hrm/employees/pub/getCheckCards',
 							title: '检查人员资料...',
@@ -467,11 +435,11 @@
 								`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}...等` :
 								`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}`;
 							return vk.alert(errorMsg, "检测Excel导入数据", "确定");
-						}
+						}*/
 
 						// 4. 批量获取员工信息映射
 						vk.toast('获取员工信息中...');
-						const employeeMap = await vk.myfn.batchGetEmployeeInfo(cards);
+						const employeeMap = await vk.myfn.batchGetAttendEmployeeInfo(cards);
 						if (!employeeMap) {
 							return vk.alert('获取员工信息失败！');
 						}
@@ -497,7 +465,7 @@
 								continue;
 							}
 
-							// 获取employee_id
+							// 获取card
 							const employeeInfo = employeeMap.get(item.card);
 							if (!employeeInfo) {
 								errorData.push({
@@ -511,7 +479,7 @@
 							item.update_date = new Date().getTime();
 							item.update_id = vk.getVuex('$user.userInfo._id');
 
-							item.employee_id = employeeInfo.employee_id;
+							item.card = employeeInfo.card;
 							validData.push(item);
 						}
 
@@ -598,10 +566,6 @@
 							"key": "attendance_ym",
 							"title": "考勤日期",
 							"type": "text"
-						}, {
-							"key": "employee_id",
-							"title": "员工工号",
-							"type": "text"
 						},
 						{
 							"key": "employees.employee_name",
@@ -609,7 +573,7 @@
 							"type": "text"
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text"
 						},

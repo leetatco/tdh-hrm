@@ -6,7 +6,7 @@
                 "launchtype" : "local"
             },
             "h5" : {
-                "launchtype" : "remote"
+                "launchtype" : "local"
             },
             "provider" : "aliyun",
             "type" : "uniCloud"

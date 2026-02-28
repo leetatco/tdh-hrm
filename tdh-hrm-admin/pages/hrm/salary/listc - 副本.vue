@@ -582,7 +582,7 @@
 										title: "员工姓名",
 										type: "text",
 										nameKey: true
-									}, 							
+									},
 									{
 										key: "card",
 										title: "身份证号码",

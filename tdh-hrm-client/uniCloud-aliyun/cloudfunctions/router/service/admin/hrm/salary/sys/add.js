@@ -88,6 +88,7 @@ module.exports = {
 			loan_cost,
 			//上月社保
 			last_month_sb,
+			last_month_gjj,
 			//上月社保代扣部份
 			last_month_dk,
 			//本月社保
@@ -156,6 +157,7 @@ module.exports = {
 				missed_cost,
 				loan_cost,
 				last_month_sb,
+				last_month_gjj,
 				last_month_dk,
 				this_month_sb,
 				this_month_dk,

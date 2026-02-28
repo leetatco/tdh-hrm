@@ -33,7 +33,7 @@ module.exports = {
 		let {
 			_id,
 			attendance_ym,
-			employee_id,
+			card,
 			last_month_sb,
 			last_month_dk,
 			this_month_sb,
@@ -55,7 +55,7 @@ module.exports = {
 					attendance_ym
 				},
 				_.or([{
-					employee_id
+					card
 				}])
 			])
 		});
@@ -74,7 +74,7 @@ module.exports = {
 			id: _id,
 			dataJson: {
 				attendance_ym,
-				employee_id,
+				card,
 				last_month_sb,
 				last_month_dk,
 				this_month_sb,

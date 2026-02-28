@@ -13,14 +13,17 @@
 				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>
 				<!-- 批量操作 -->
-				<el-button type="primary" size="small" icon="el-icon-edit-outline" v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="exportExcelAll"> 导出全部
+				<el-button type="primary" size="small" icon="el-icon-edit-outline"
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="exportExcelAll"> 导出全部
 				</el-button>
 				<el-upload style="display: inline-block;margin-left: 20rpx;margin-right: 20rpx;" accept=".xlsx, .xls"
-					:auto-upload="false" :limit="1" :show-file-list="false" :file-list="fileList" v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')"
-					:on-change="handleChange" action="">
+					:auto-upload="false" :limit="1" :show-file-list="false" :file-list="fileList"
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" :on-change="handleChange"
+					action="">
 					<el-button type="primary" size="small" icon="el-icon-upload2">导入excel</el-button>
 				</el-upload>
-				<el-button type="primary" size="small" icon="el-icon-tickets" v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="exportExcelModel"> 下载模版
+				<el-button type="primary" size="small" icon="el-icon-tickets"
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="exportExcelModel"> 下载模版
 				</el-button>
 			</el-row>
 		</view>
@@ -120,6 +123,12 @@
 						{
 							"key": "overtime_fee",
 							"title": "固定加班",
+							"type": "number",
+							"width": colWidth - 100
+						},
+						{
+							"key": "penalty_fund",
+							"title": "社保补偿金",
 							"type": "number",
 							"width": colWidth - 100
 						},
@@ -247,6 +256,12 @@
 								"width": colWidth
 							},
 							{
+								"key": "penalty_fund",
+								"title": "社保补偿金",
+								"type": "number",
+								"width": colWidth
+							},
+							{
 								"key": "housing_fund",
 								"title": "公积补偿金",
 								"precision": 0,
@@ -298,6 +313,11 @@
 								trigger: ['blur', 'change']
 							}],
 							overtime_fee: [{
+								required: true,
+								message: "该项不能为空",
+								trigger: ['blur', 'change']
+							}],
+							penalty_fund: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
@@ -489,6 +509,10 @@
 						"title": "固定加班",
 						"type": "number"
 					},
+					penalty_fund: {
+						"title": "社保补偿金",
+						"type": "number"
+					},
 					housing_fund: {
 						"title": "公积补偿金",
 						"type": "number"
@@ -588,6 +612,11 @@
 							"type": "number"
 						},
 						{
+							"key": "penalty_fund",
+							"title": "社保补偿金",
+							"type": "number"
+						},
+						{
 							"key": "housing_fund",
 							"title": "公积补偿金",
 							"type": "number"
@@ -650,6 +679,11 @@
 						{
 							"key": "overtime_fee",
 							"title": "固定加班",
+							"type": "number"
+						},
+						{
+							"key": "penalty_fund",
+							"title": "社保补偿金",
 							"type": "number"
 						},
 						{

@@ -1,7 +1,7 @@
 module.exports = {
 	/**
 	 * 查询多条记录 分页
-	 * @url admin/crm/credit/sys/getList 前端调用的url参数地址
+	 * @url admin/hrm/salary/sys/all/getgsAll 前端调用的url参数地址
 	 * data 请求参数 说明
 	 * @params {Number}         pageIndex 当前页码
 	 * @params {Number}         pageSize  每页显示数量
@@ -13,17 +13,49 @@ module.exports = {
 	 * @params {String}         msg       详细信息
 	 */
 	main: async (event) => {
-		let { data = {}, userInfo, util, filterResponse, originalParam } = event;
-		let { customUtil, uniID, config, pubFun, vk, db, _ } = util;
-		let { uid } = data;
-		let res = { code: 0, msg: '' };
+		let {
+			data = {}, userInfo, util, filterResponse, originalParam
+		} = event;
+		let {
+			customUtil,
+			uniID,
+			config,
+			pubFun,
+			vk,
+			db,
+			_
+		} = util;
+		let {
+			uid,
+			cards		
+		} = data;
+		let res = {
+			code: 0,
+			msg: ''
+		};
+
+		// 参数验证开始		
+		if (!cards || !Array.isArray(cards) || cards.length === 0) {
+			res.code = -1;
+			res.msg = 'cards参数必须是非空数组';
+			return res;
+		}
+		
+		// 参数验证结束	
 		// 业务逻辑开始-----------------------------------------------------------
-		let dbName = "crm-actual-credit"; // 表名
+		let dbName = "hrm-salary-employees"; // 表名
 		res = await vk.baseDao.getTableData({
 			dbName,
-			data
+			data: {
+				pageIndex: 1,
+				pageSize: -1,
+			},
+			whereJson: {
+				card: {
+					$in: cards
+				}
+			}
 		});
 		return res;
 	}
-
 }

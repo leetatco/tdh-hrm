@@ -11,7 +11,7 @@
 		<view>
 			<el-row>
 				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
-					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>				
 				<el-button type="primary" size="small" icon="el-icon-edit-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="exportExcelAll"> 导出全部
 				</el-button>
@@ -51,6 +51,17 @@
 	let vk = uni.vk; // vk实例
 	let originalForms = {}; // 表单初始化数据
 	const colWidth = 200;
+	let nowy = new Date(vk.pubfn.getOffsetTime(new Date(), {
+		mode: "before", // after 之后 before 之前
+	})).getFullYear();
+
+	let nowm = new Date(vk.pubfn.getOffsetTime(new Date(), {
+		mode: "before", // after 之后 before 之前
+	})).getMonth();
+
+	let nowm1 = nowm > 9 ? nowm : `0${nowm}`;
+
+	const nowym = vk.myfn.normalizeMonth(`${nowy}-${nowm1}`);
 	export default {
 		data() {
 			// 页面数据变量
@@ -91,31 +102,25 @@
 					],
 					// 表格字段显示规则
 					columns: [{
-							"key": "employee_id",
-							"title": "员工工号",
-							"type": "text",
-							"width": colWidth - 100
-						},
-						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",
 							"type": "text",
 							"width": colWidth - 100
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text",
 							"width": colWidth
 						},
 						{
-							"key": "employees.departments.department_name",
+							"key": "employees.department_name",
 							"title": "部门",
 							"type": "text",
 							"width": colWidth
 						},
 						{
-							"key": "employees.positions.position_name",
+							"key": "employees.position_name",
 							"title": "职务",
 							"type": "text",
 							"width": colWidth - 100
@@ -149,12 +154,6 @@
 								if (row.salary_type == 2) return `<text>${row.salary}/天</text>`;
 								if (row.salary_type == 3) return `<text>${row.salary}/时</text>`;
 							}
-						},
-						{
-							"key": "confirm_id",
-							"title": "确认人工号",
-							"type": "text",
-							"width": colWidth - 100
 						},
 						{
 							"key": "confirms.employee_name",
@@ -199,19 +198,13 @@
 					},
 					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
 					columns: [{
-							key: "employee_id",
+							key: "card",
 							title: "",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -221,28 +214,22 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: colWidth - 50,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
-									width: colWidth - 50,
+									width: 150,
 									mode: "%%"
-								}, {
+								},
+								{
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									width: colWidth,
+									width: 150,
 									mode: "%%"
 								}
 
@@ -253,33 +240,34 @@
 							title: "",
 							type: "table-select",
 							placeholder: "选择确认人",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
 									nameKey: true
 								},
+								{
+									key: "card",
+									title: "身份证号码",
+									type: "text",
+									idKey: true
+
+								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: colWidth - 50,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
-									width: colWidth - 50,
+									width: 150,
+									mode: "%%"
+								},
+								{
+									key: "card",
+									title: "身份证号码",
+									type: "text",
+									width: 150,
 									mode: "%%"
 								}
 
@@ -302,19 +290,13 @@
 						action: "",
 						// 表单字段显示规则
 						columns: [{
-								key: "employee_id",
-								title: "",
+								key: "card",
+								title: "姓名",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
 								multiple: false,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -324,27 +306,22 @@
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										nameKey: true
+										idKey: true
+
 									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
-										width: colWidth - 50,
+										width: 150,
 										mode: "%%"
-									}, {
+									},
+									{
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										width: colWidth,
+										width: 150,
 										mode: "%%"
 									}
 
@@ -375,36 +352,37 @@
 							},
 							{
 								key: "confirm_id",
-								title: "",
+								title: "确认人",
 								type: "table-select",
 								placeholder: "选择确认人",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
 								multiple: false,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
 										nameKey: true
 									},
+									{
+										key: "card",
+										title: "身份证号码",
+										type: "text",
+										idKey: true
+
+									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
-										width: colWidth - 50,
+										width: 150,
+										mode: "%%"
+									},
+									{
+										key: "card",
+										title: "身份证号码",
+										type: "text",
+										width: 150,
 										mode: "%%"
 									}
 
@@ -425,7 +403,7 @@
 						],
 						// 表单验证规则
 						rules: {
-							employee_id: [{
+							card: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
@@ -540,21 +518,14 @@
 						_id: item._id
 					},
 				});
-			},
+			},			
+
 			//导入xls表格文件
 			handleChange(file) {
 				//定义字段即将导入的excel表中的数据显示在el-table中，这些字段是显示的部分（同时需要将导入的数据传给后端）
 				let typeObj = {
 					card: {
 						"title": "身份证号码",
-						"type": "text"
-					},
-					employee_id: {
-						"title": "员工工号",
-						"type": "text"
-					},
-					position_id: {
-						"title": "职位代码",
 						"type": "text"
 					},
 					salary_type: {
@@ -588,7 +559,7 @@
 						}
 
 						// 2. 批量检查人员基本资料
-						vk.toast('检查人员基本资料中...');
+						/*vk.toast('检查人员基本资料中...');
 						const checkRes = await vk.callFunction({
 							url: 'admin/hrm/employees/pub/getCheckCards',
 							title: '检查人员资料...',
@@ -603,11 +574,12 @@
 								`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}...等` :
 								`人员基本资料不能为空(${checkRes.cardeds.length}条): ${errorCards}`;
 							return vk.alert(errorMsg, "检测Excel导入数据", "确定");
-						}
+						}*/
 
 						// 3. 批量获取员工信息映射
 						vk.toast('获取员工信息中...');
-						const employeeMap = await vk.myfn.batchGetEmployeeInfo(cards);
+						const employeeMap = await vk.myfn.batchGetAttendEmployeeInfo(
+							cards);
 						if (!employeeMap) {
 							return vk.alert('获取员工信息失败！');
 						}
@@ -633,7 +605,7 @@
 								continue;
 							}
 
-							// 获取employee_id
+							// 获取card
 							const employeeInfo = employeeMap.get(item.card);
 							if (!employeeInfo) {
 								errorData.push({
@@ -653,7 +625,7 @@
 							item.update_date = new Date().getTime();
 							item.update_id = vk.getVuex('$user.userInfo._id');
 
-							item.employee_id = employeeInfo.employee_id;
+							item.card = employeeInfo.card;
 							validData.push(item);
 						}
 
@@ -671,15 +643,16 @@
 
 
 						// 5. 提取所有员工工号
-						const employee_ids = validData.map(item => item.employee_id).filter(employee_id =>
-							employee_id);
+						const empCards = validData.map(item => item.card).filter(
+							card =>
+							card);
 
 						// 6.删除旧数据
 						let delRes = await vk.callFunction({
 							url: 'admin/hrm/salary/sys/employees/deleteAll',
 							title: '删除中...',
 							data: {
-								employee_ids
+								cards: empCards
 							}
 						})
 
@@ -721,7 +694,7 @@
 					fileName: new Date().getFullYear() + '员工定薪表模版',
 					title: "正在导入数据...",
 					columns: [{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text"
 						},
@@ -762,28 +735,23 @@
 					fileName: new Date().getFullYear() + '人员定薪信息',
 					title: "正在导出数据...",
 					columns: [{
-							"key": "employee_id",
-							"title": "员工工号",
-							"type": "text"
-						},
-						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",
 							"type": "text"
 						},
 						{
-							"key": "employees.card",
+							"key": "card",
 							"title": "身份证号码",
 							"type": "text"
 						},
 						{
-							"key": "employees.positions.position_name",
+							"key": "employees.position_name",
 							"title": "职位名称",
 							"type": "text"
 						},
 
 						{
-							"key": "employees.departments.department_name",
+							"key": "employees.department_name",
 							"title": "所属部门",
 							"type": "text"
 						},
@@ -809,11 +777,6 @@
 							"title": "综合工资",
 							"precision": 0,
 							"type": "number"
-						},
-						{
-							"key": "confirm_id",
-							"title": "确认人工号",
-							"type": "text"
 						},
 						{
 							"key": "confirms.employee_name",

@@ -33,7 +33,7 @@ module.exports = {
 		let {
 			_id,
 			attendance_ym,
-			employee_id,
+			card,
 			standard,
 			standard_type,
 			first_month,
@@ -54,7 +54,7 @@ module.exports = {
 			dbName,
 			whereJson: {
 				attendance_ym,
-				employee_id
+				card
 			}
 		});
 		if (checkRes) {
@@ -74,7 +74,7 @@ module.exports = {
 			id: _id,
 			dataJson: {
 				attendance_ym,
-				employee_id,
+				card,
 				standard,
 				standard_type,
 				first_month,

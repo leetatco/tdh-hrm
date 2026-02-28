@@ -217,7 +217,6 @@ myfn.getResignEmployees = async function(card) {
 	return [];
 }
 
-
 //主算入职年限
 myfn.calculateServiceYears = function(entryDateStr) {
 	// 将字符串转换为Date对象
@@ -235,6 +234,34 @@ myfn.calculateServiceYears = function(entryDateStr) {
 	}
 
 	return years;
+}
+
+// 批量获取最新员工信息
+myfn.batchGetAttendEmployeeInfo = async (cards) => {
+	try {
+		// 去重
+		const uniqueCards = [...new Set(cards)];
+		const employeeMap = new Map();
+		const res = await vk.callFunction({
+			url: 'admin/hrm/attendance/sys/all/getBatchEmployeeInfo',
+			title: '获取考勤员工信息中...',
+			data: {
+				cards: uniqueCards
+			}
+		});
+
+		if (res.code === 0 && res.data) {
+			res.data.forEach(employee => {
+				if (employee.card && employee.employee_name) {
+					employeeMap.set(employee.card, employee);
+				}
+			});
+		}
+		return employeeMap;
+	} catch (error) {
+		console.error('批量获取员工信息失败:', error);
+		return null;
+	}
 }
 
 
@@ -264,6 +291,36 @@ myfn.batchGetEmployeeInfo = async (cards) => {
 		console.error('批量获取员工信息失败:', error);
 		return null;
 	}
+}
+// 工资类型判断
+myfn.parseSalary = (str) => {
+	// 提取数字部分（整数或小数）
+	const match = str.match(/^\d+(?:\.\d+)?/);
+	const number = match ? match[0] : ''; // 如果没有数字则返回空字符串
+
+	// 判断类型
+	let type = 1;
+	if (str.includes('天')) {
+		type = 2;
+	} else if (str.includes('H')) {
+		type = 3;
+	}
+
+	return {
+		type,
+		number
+	}
+}
+
+// 处理工资月份格式
+myfn.toFormatDate = (input) => {
+	// 按小数点分割
+	const [year, month] = input.split('.');
+	// 补全年份为四位（假设都是2000年以后）
+	const fullYear = '20' + year.padStart(2, '0');
+	// 月份补零到两位
+	const fullMonth = month.padStart(2, '0');
+	return `${fullYear}-${fullMonth}`;
 }
 
 

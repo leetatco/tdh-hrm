@@ -10,17 +10,17 @@
 		<!-- 自定义按钮区域开始 -->
 		<view>
 			<el-row>
-				<el-button type="success" size="small" icon="el-icon-circle-plus-outline" v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>
-				<!-- 批量操作 -->				
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>
+				<!-- 批量操作 -->
 			</el-row>
 		</view>
 		<!-- 自定义按钮区域结束 -->
 
 		<!-- 表格组件开始 -->
 		<vk-data-table ref="table1" :action="table1.action" :columns="table1.columns" :query-form-param="queryForm1"
-			:right-btns="table1.rightBtns" :selection="true" :row-no="true" :pagination="true"
-			@update="updateBtn" @delete="deleteBtn" @current-change="currentChange"
-			@selection-change="selectionChange"></vk-data-table>
+			:right-btns="table1.rightBtns" :selection="true" :row-no="true" :pagination="true" @update="updateBtn"
+			@delete="deleteBtn" @current-change="currentChange" @selection-change="selectionChange"></vk-data-table>
 		<!-- 表格组件结束 -->
 
 		<!-- 添加或编辑的弹窗开始 -->
@@ -73,26 +73,21 @@
 							mode: 'delete',
 							title: '删除',
 							show: (item) => {
-								return this.$hasRole('admin') || (item.employee_id != 'common' && this.$hasPermission('hrm-salary-config-delete'))
+								return this.$hasRole('admin') || (item.card !== 'common' && this
+									.$hasPermission('hrm-salary-config-delete'))
 							}
 						}
 					],
 					// 表格字段显示规则
 					columns: [{
-							"key": "employees.employee_id",
-							"title": "员工工号",
-							"type": "text",
-							"width": colWidth-100
-						},
-						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",
 							"type": "text",
-							"width": colWidth-100
+							"width": colWidth - 100
 						},
 						{
-							"key": "employees.card",
-							"title": "身份证号码",
+							"key": "card",
+							"title": "身份证号",
 							"type": "text",
 							"width": colWidth
 						},
@@ -100,7 +95,7 @@
 							"key": "overtime_cost",
 							"title": "加班费/小时",
 							"type": "number",
-							"width": colWidth-100
+							"width": colWidth - 100
 						},
 						{
 							"key": "comment",
@@ -122,7 +117,7 @@
 							"width": colWidth,
 							"show": ["detail"]
 						}
-					],					
+					],
 					// 多选框选中的值
 					multipleSelection: [],
 					// 当前高亮的记录
@@ -138,54 +133,42 @@
 					},
 					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
 					columns: [{
-								key: "employee_id",
-								title: "",
-								type: "table-select",
-								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
-								multiple: false,
-								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
-										key: "employee_name",
-										title: "员工姓名",
-										type: "text",
-										nameKey: true
-									},
-									{
-										key: "card",
-										title: "身份证号码",
-										type: "text",
-										nameKey: true
+							key: "card",
+							title: "",
+							type: "table-select",
+							placeholder: "选择员工",
+							action: "admin/hrm/attendance/sys/getList",
+							multiple: false,
+							columns: [{
+									key: "employee_name",
+									title: "员工姓名",
+									type: "text",
+									nameKey: true
+								},
+								{
+									key: "card",
+									title: "身份证号码",
+									type: "text",
+									idKey: true
 
-									}
-								],
-								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
-										key: "employee_name",
-										title: "员工姓名",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									}, {
-										key: "card",
-										title: "身份证号码",
-										type: "text",
-										width: colWidth,
-										mode: "%%"
-									}
+								}
+							],
+							queryColumns: [{
+									key: "employee_name",
+									title: "员工姓名",
+									type: "text",
+									width: 150,
+									mode: "%%"
+								},
+								{
+									key: "card",
+									title: "身份证号码",
+									type: "text",
+									width: 150,
+									mode: "%%"
+								}
 
-								]
+							]
 						},
 						//{"key":"comment","title":"备注","type":"text","width":colWidth,"mode":"="},
 						//{"key":"update_date","title":"更新时间","type":"datetimerange","width":colWidth,"mode":"="},
@@ -203,19 +186,22 @@
 						action: "",
 						// 表单字段显示规则
 						columns: [{
-								key: "employee_id",
-								title: "",
+								key: "attendance_ym",
+								title: "考勤日期",
+								type: "date",
+								dateType: "date",
+								valueFormat: "yyyy-MM",
+								format: "yyyy-MM",								
+								"show": ["none"]
+							},
+							{
+								key: "card",
+								title: "姓名",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
 								multiple: false,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -225,39 +211,32 @@
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										nameKey: true
+										idKey: true
 
 									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
-										width: colWidth - 50,
+										width: 150,
 										mode: "%%"
-									}, {
+									},
+									{
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										width: colWidth,
+										width: 150,
 										mode: "%%"
 									}
-
 								],
 								showRule: () => {
-								    if (this.form1.data.employee_id !== 'common') {
-								      return true;
-								    } else {
-								      return false;
-								    }
-								  }
+									if (this.form1.data.card !== 'common') {
+										return true;
+									} else {
+										return false;
+									}
+								}
 							},
 							{
 								"key": "overtime_cost",
@@ -280,7 +259,7 @@
 						],
 						// 表单验证规则
 						rules: {
-							employee_id: [{
+							card: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']

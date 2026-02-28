@@ -30,9 +30,9 @@
 			<vk-data-form v-model="form1.data" :rules="form1.props.rules" :action="form1.props.action"
 				:form-type="form1.props.formType" :columns='form1.props.columns' label-width="80px" :inline="true"
 				:columnsNumber="2" @success="form1.props.show = false;refresh();">
-				<!-- <template v-slot:grant="{ form }">
+				<template v-slot:grant="{ form }">
 					<el-input-number v-model="form.grant" :precision="0" />
-				</template> -->
+				</template>
 				<template v-slot:agency_fee="{ form }">
 					<el-input-number v-model="form.agency_fee" :precision="0" />
 				</template>
@@ -108,24 +108,19 @@
 							type: "date",
 							dateType: "date",
 							valueFormat: "yyyy-MM",
-							format: "yyyy-MM"
+							format: "yyyy-MM",
+							width: colWidth - 100
 						}, {
-							"key": "employee_id",
-							"title": "员工工号",
+							"key": "card",
+							"title": "身份证号",
 							"type": "text",
-							"width": colWidth - 100
+							"width": colWidth
 						},
 						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",
 							"type": "text",
 							"width": colWidth - 100
-						},
-						{
-							"key": "employees.card",
-							"title": "身份证号码",
-							"type": "text",
-							"width": colWidth
 						},
 						{
 							"key": "reward_cost",
@@ -139,12 +134,12 @@
 							"type": "number",
 							"width": colWidth - 100
 						},
-						// {
-						// 	"key": "grant",
-						// 	"title": "补助金",
-						// 	"type": "number",
-						// 	"width": colWidth - 100
-						// },
+						{
+							"key": "grant",
+							"title": "补助金",
+							"type": "number",
+							"width": colWidth - 100
+						},
 						{
 							"key": "agency_fee",
 							"title": "介绍费",
@@ -202,19 +197,13 @@
 							"mode": "="
 						},
 						{
-							key: "employee_id",
-							title: "",
+							key: "card",
+							title: "员工",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -224,31 +213,24 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: colWidth - 50,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
-									width: colWidth - 50,
+									width: 150,
 									mode: "%%"
-								}, {
+								},
+								{
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									width: colWidth,
+									width: 150,
 									mode: "%%"
 								}
-
 							]
 						},
 						//{"key":"last_month_water","title":"上月数","type":"number","width":colWidth,"mode":"="},
@@ -289,19 +271,13 @@
 								"width": colWidth
 							},
 							{
-								key: "employee_id",
-								title: "",
+								key: "card",
+								title: "员工",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
 								multiple: false,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -311,31 +287,24 @@
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										nameKey: true
+										idKey: true
 
 									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
-										width: colWidth - 50,
+										width: 150,
 										mode: "%%"
-									}, {
+									},
+									{
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										width: colWidth,
+										width: 150,
 										mode: "%%"
 									}
-
 								]
 							},
 							{
@@ -362,13 +331,13 @@
 								title: "介绍费，其它费用",
 								type: "bar-title"
 							},
-							// {
-							// 	"key": "grant",
-							// 	"title": "补助金",
-							// 	"precision": 0,
-							// 	"type": "number",
-							// 	"width": colWidth
-							// },
+							{
+								"key": "grant",
+								"title": "补助金",
+								"precision": 0,
+								"type": "number",
+								"width": colWidth
+							},
 							{
 								"key": "agency_fee",
 								"title": "介绍费",
@@ -402,7 +371,7 @@
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
 							}],
-							employee_id: [{
+							card: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']

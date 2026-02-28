@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": ["attendance_ym", "empids", "dorm_id"],
+	"required": ["attendance_ym", "cards", "dorm_id"],
 	"permission": {
 		"read": false,
 		"create": false,
@@ -20,6 +20,11 @@
 			"title": "员工号码组",
 			"bsonType": "array",
 			"description": "员工号码组"
+		},
+		"cards": {
+			"title": "员工身份证号码组",
+			"bsonType": "array",
+			"description": "员工身份证号码组"
 		},
 		"dorm_id": {
 			"title": "房号",

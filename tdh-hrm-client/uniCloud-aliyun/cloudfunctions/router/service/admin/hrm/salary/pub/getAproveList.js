@@ -35,127 +35,71 @@ module.exports = {
 			msg: ''
 		};
 
-		// 设置 pageSize 为 -1 获取所有记录（不分页）
-		data.pageSize = -1;
-		data.pageIndex = 1;
 		// 业务逻辑开始-----------------------------------------------------------
 		let dbName = "hrm-attendance-approve"; // 表名
-		res = await vk.baseDao.getTableData({
-			dbName,
-			data,
-			whereJson: {
-				attendance_ym,
-				enable_hr
-			},
-			// 副表
-			foreignDB: [{
-					dbName: "hrm-employees",
-					localKey: "employee_id",
-					foreignKey: "employee_id",
-					as: "employees",
-					limit: 1,
-					foreignDB: [{
-							dbName: "hrm-positions",
-							localKey: "position_id",
-							foreignKey: "position_id",
-							as: "positions",
-							limit: 1
-						},
-						{
-							dbName: "hrm-resigntypes",
-							localKey: "type_id",
-							foreignKey: "type_id",
-							as: "resigntypes",
-							limit: 1
-						},
-						{
-							dbName: "hrm-companys",
-							localKey: "company_id",
-							foreignKey: "company_id",
-							as: "companys",
-							limit: 1
-						},
-						{
-							dbName: "hrm-departments",
-							localKey: "department_id",
-							foreignKey: "department_id",
-							as: "departments",
-							limit: 1
-						}
-					],
-				}, {
-					dbName: "uni-id-users",
-					localKey: "update_id",
-					foreignKey: "_id",
-					as: "users",
-					limit: 1
+		
+		// 构建查询条件（保持不变）
+		let whereJson = {
+			attendance_ym,
+			enable_hr
+		};
+
+		// 副表关联配置（保持不变）
+		let foreignDB = [
+			{
+				dbName: "hrm-salary-employees",
+				localKey: "card",
+				foreignKey: "card",
+				as: "salarys",
+				limit: 1
+			}, {
+				dbName: "uni-id-users",
+				localKey: "update_id",
+				foreignKey: "_id",
+				as: "users",
+				limit: 1
+			}
+		];
+
+		// 手动分页获取所有数据（突破1000条限制）
+		let allData = [];
+		let pageSize = 500; // 每次查询条数，可根据实际情况调整（建议500~1000）
+		let pageIndex = 1;
+		let hasMore = true;
+
+		while (hasMore) {
+			// 调用 vk.baseDao.getTableData 进行分页查询
+			let pageRes = await vk.baseDao.getTableData({
+				dbName,
+				data: {
+					// 保留原 data 中的其他参数（如 sortRule, formData, columns 等）
+					...data,
+					pageSize,
+					pageIndex
 				},
-				//定薪表
-				{
-					dbName: "hrm-salary-employees",
-					localKey: "employee_id",
-					foreignKey: "employee_id",
-					as: "salarys",
-					limit: 1
-				},
-				// //放假补助
-				// {
-				// 	dbName: "hrm-salary-free",
-				// 	localKey: "employee_id",
-				// 	foreignKey: "employee_id",
-				// 	whereJson: {
-				// 		attendance_ym
-				// 	},
-				// 	as: "frees",
-				// 	limit: 1
-				// },
-				// //代扣社保
-				// {
-				// 	dbName: "hrm-salary-sb",
-				// 	localKey: "employee_id",
-				// 	foreignKey: "employee_id",
-				// 	whereJson: {
-				// 		attendance_ym
-				// 	},
-				// 	as: "sbs",
-				// 	limit: 1
-				// },
-				// //代扣个税
-				// {
-				// 	dbName: "hrm-salary-gs",
-				// 	localKey: "employee_id",
-				// 	foreignKey: "employee_id",
-				// 	whereJson: {
-				// 		attendance_ym
-				// 	},
-				// 	as: "gss",
-				// 	limit: 1
-				// },
-				// //借款
-				// {
-				// 	dbName: "hrm-salary-loan",
-				// 	localKey: "employee_id",
-				// 	foreignKey: "employee_id",
-				// 	whereJson: {
-				// 		attendance_ym
-				// 	},
-				// 	as: "loans",
-				// 	limit: 1
-				// },
-				// //公司社保
-				// {
-				// 	dbName: "hrm-salary-companysb",
-				// 	localKey: "employee_id",
-				// 	foreignKey: "employee_id",
-				// 	whereJson: {
-				// 		attendance_ym
-				// 	},
-				// 	as: "companysbs",
-				// 	limit: 1
-				// },
-			]
-		});
+				whereJson,
+				foreignDB
+			});
+
+			// 如果查询出错，直接返回错误
+			if (pageRes.code !== 0) {
+				return pageRes;
+			}
+
+			let rows = pageRes.rows || [];
+			allData = allData.concat(rows);
+
+			// 判断是否还有更多数据：返回的行数小于 pageSize 说明已取完
+			if (rows.length < pageSize) {
+				hasMore = false;
+			} else {
+				pageIndex++;
+			}
+		}
+
+		// 组装最终返回结果
+		res.rows = allData;
+		res.total = allData.length;
 		return res;
 	}
-
 }

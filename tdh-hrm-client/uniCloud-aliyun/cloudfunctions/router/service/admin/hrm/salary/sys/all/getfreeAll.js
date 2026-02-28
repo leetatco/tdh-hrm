@@ -27,7 +27,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			employee_ids,
+			cards,
 			attendance_ym_keys
 		} = data;
 		let res = {
@@ -36,9 +36,9 @@ module.exports = {
 		};
 
 		// 参数验证开始		
-		if (!employee_ids || !Array.isArray(employee_ids) || employee_ids.length === 0) {
+		if (!cards || !Array.isArray(cards) || cards.length === 0) {
 			res.code = -1;
-			res.msg = 'employee_ids参数必须是非空数组';
+			res.msg = 'cards参数必须是非空数组';
 			return res;
 		}
 
@@ -57,8 +57,8 @@ module.exports = {
 				pageSize: -1,
 			},
 			whereJson: {
-				employee_id: {
-					$in: employee_ids
+				card: {
+					$in: cards
 				},
 				attendance_ym: {
 					$in: attendance_ym_keys

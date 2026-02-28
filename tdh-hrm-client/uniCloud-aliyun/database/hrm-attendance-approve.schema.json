@@ -82,6 +82,22 @@
 			"bsonType": "int",
 			"description": "实际天数"
 		},
+		"salary_type": {
+			"bsonType": "int",
+			"title": "工资类型",
+			"description": "工资类型：1 月薪 2 日薪 3 时薪",
+			"defaultValue": 1,
+			"enum": [{
+				"text": "月薪",
+				"value": 1
+			}, {
+				"text": "日薪",
+				"value": 2
+			}, {
+				"text": "时薪",
+				"value": 3
+			}]
+		},
 		"typhoon_duty": {
 			"title": "台风",
 			"bsonType": "string",

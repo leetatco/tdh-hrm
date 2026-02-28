@@ -28,7 +28,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			employee_id,
+			card,
 			attendance_ym_key
 		} = data;
 		let res = {
@@ -41,7 +41,7 @@ module.exports = {
 			dbName,
 			data,
 			whereJson: {
-				empids: employee_id, //empids包含employee_id的值
+				cards: card, //empids包含employee_id的值
 				attendance_ym: attendance_ym_key
 			},
 			groupJson: {

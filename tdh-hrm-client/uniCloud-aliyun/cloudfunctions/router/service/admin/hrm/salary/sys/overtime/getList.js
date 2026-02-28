@@ -27,7 +27,8 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			employee_id
+			employee_id,
+			card
 		} = data;
 		let res = {
 			code: 0,
@@ -42,15 +43,20 @@ module.exports = {
 			whereJson.employee_id = employee_id;
 		}
 
+		if (vk.pubfn.isNotNull(card)) {
+			whereJson.card = card;
+		}
+
 		res = await vk.baseDao.getTableData({
 			dbName,
 			data,
 			whereJson,
 			// 副表
 			foreignDB: [{
-				dbName: "hrm-employees",
-				localKey: "employee_id",
-				foreignKey: "employee_id",
+				dbName: "hrm-attendance-detail",
+				localKey: "card",
+				localKeyType: "array",
+				foreignKey: "card",
 				as: "employees",
 				limit: 1
 			}, {

@@ -126,14 +126,14 @@
 							format: "yyyy-MM"
 						},
 						{
-							key: "employee_ids",
-							title: "员工工号",
+							key: "cards",
+							title: "身份证号",
 							type: "html",
-							width: colWidth - 100,
+							width: colWidth,
 							formatter: (val, row, column, index) => {
 								let str = "<text>";
-								row.employees.map((item, index) => {
-									str += item.employee_id;
+								row.cards.map((item, index) => {
+									str += item;
 									str += "<br>";
 								})
 								str += "</text>";
@@ -280,19 +280,13 @@
 							"mode": "="
 						},
 						{
-							key: "empids",
+							key: "cards",
 							title: "",
 							type: "table-select",
 							placeholder: "选择员工",
-							action: "admin/hrm/employees/sys/getList",
+							action: "admin/hrm/attendance/sys/getList",
 							multiple: false,
 							columns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									idKey: true
-								}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
@@ -302,28 +296,22 @@
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									nameKey: true
+									idKey: true
 
 								}
 							],
 							queryColumns: [{
-									key: "employee_id",
-									title: "员工工号",
-									type: "text",
-									width: colWidth - 50,
-									mode: "%%"
-								},
-								{
 									key: "employee_name",
 									title: "员工姓名",
 									type: "text",
-									width: colWidth - 50,
+									width: 150,
 									mode: "%%"
-								}, {
+								},
+								{
 									key: "card",
 									title: "身份证号码",
 									type: "text",
-									width: colWidth,
+									width: 150,
 									mode: "%%"
 								}
 
@@ -429,7 +417,7 @@
 							},
 							{
 								key: "dorm_id",
-								title: "",
+								title: "房号",
 								type: "table-select",
 								placeholder: "选择房号",
 								action: "admin/hrm/dorm/sys/getList",
@@ -484,20 +472,14 @@
 								]
 							},
 							{
-								key: "empids",
+								key: "cards",
 								title: "入住员工",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/employees/sys/getList",
+								action: "admin/hrm/attendance/sys/getList",
 								oneLine: true,
 								multiple: true,
 								columns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										idKey: true
-									}, // idKey:true 代表此字段为主键字段，若设置show:["none"],则可以在表格中隐藏该字段的显示
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
@@ -507,28 +489,22 @@
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										nameKey: true
+										idKey: true
 
 									}
 								],
 								queryColumns: [{
-										key: "employee_id",
-										title: "员工工号",
-										type: "text",
-										width: colWidth - 50,
-										mode: "%%"
-									},
-									{
 										key: "employee_name",
 										title: "员工姓名",
 										type: "text",
-										width: colWidth - 50,
+										width: 150,
 										mode: "%%"
-									}, {
+									},
+									{
 										key: "card",
 										title: "身份证号码",
 										type: "text",
-										width: colWidth,
+										width: 150,
 										mode: "%%"
 									}
 
@@ -648,7 +624,7 @@
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
 							}],
-							empids: [{
+							cards: [{
 								required: true,
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
@@ -824,7 +800,7 @@
 			// 导出xls表格文件（全部数据）
 			exportExcelAll() {
 				this.$refs.table1.exportExcel({
-					fileName: new Date().getFullYear() + '人员水电费用信息',
+					fileName: nowym + '人员水电费用信息',
 					title: "正在导出数据...",
 					columns: [{
 							key: "attendance_ym",
@@ -834,13 +810,13 @@
 							valueFormat: "yyyy-MM",
 							format: "yyyy-MM",
 						}, {
-							"key": "employee_ids",
-							"title": "员工工号",
+							"key": "cards",
+							"title": "员工身份证号",
 							"type": "text",
 							formatter: (val, row, column, index) => {
 								let str = "<text>";
 								row.employees.map((item, index) => {
-									str += item.employee_id;
+									str += item.card;
 									str += "<br>";
 								})
 								str += "</text>";
@@ -947,8 +923,8 @@
 				let share_cost = 0;
 				let length = 0;
 				total = w_cost + e_cost;
-				if (vk.pubfn.isNotNull(this.form1.data.empids))
-					length = this.form1.data.empids.length || 0;
+				if (vk.pubfn.isNotNull(this.form1.data.cards))
+					length = this.form1.data.cards.length || 0;
 				if (total > 0 && length > 0) {
 					share_cost = total / length;
 				} else {
