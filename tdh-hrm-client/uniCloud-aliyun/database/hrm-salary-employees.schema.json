@@ -18,20 +18,27 @@
 			"foreignKey": "hrm-employees.employee_id",
 			"trim": "both"
 		},
-		"salary_type": {
+		"card": {
+			"title": "身份证号码",
 			"bsonType": "string",
+			"description": "身份证号码唯一标识，不可修改，不允许重复",
+			"foreignKey": "hrm-attendance-detail.card",
+			"trim": "both"
+		},
+		"salary_type": {
+			"bsonType": "int",
 			"title": "工资类型",
 			"description": "工资类型：1 月薪 2 日薪 3 时薪",
-			"defaultValue": "1",
+			"defaultValue": 1,
 			"enum": [{
 				"text": "月薪",
-				"value": "1"
+				"value": 1
 			}, {
 				"text": "日薪",
-				"value": "2"
+				"value": 2
 			}, {
 				"text": "时薪",
-				"value": "3"
+				"value": 3
 			}]
 		},
 		"salary": {

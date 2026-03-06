@@ -756,7 +756,7 @@
 					title: '请求中...',
 					data: {
 						sql: 'select * from tdh_oa.tdh_signrecord where admin_id=? and sign_date=? ',
-						params: ['12590', '2026-02-26']
+						params: ['12590', '2026-03-06']
 					}
 				});
 				console.log(data.rows)
@@ -767,9 +767,9 @@
 					url: 'admin/crm/client/sys/editkq',
 					title: '请求中...',
 					data: {
-						sql: "UPDATE tdh_oa.tdh_signrecord SET sign_time = 1772079266, create_time=1772079266 WHERE id=?",
+						sql: "UPDATE tdh_oa.tdh_signrecord SET sign_time = 1772755160, create_time=1772755160 WHERE id=?",
 						// sql: "UPDATE tdh_oa.tdh_signrecord SET lat = '22.64429600', lng='113.83891500' WHERE id=?",					
-						params: ['1057046']
+						params: ['1067444']
 					}
 				});
 				console.log(data.rows)

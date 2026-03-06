@@ -516,7 +516,8 @@
 					})
 				} catch (error) {
 					console.error('导入Excel失败:', error);
-					vk.alert(`导入Excel失败: ${error.message}`, "系统错误", "确定");
+					vk.alert(`导入Excel失败: ${error.message}`, "系统错误", "确定");					
+				} finally {
 					this.fileList = [];
 				}
 			},

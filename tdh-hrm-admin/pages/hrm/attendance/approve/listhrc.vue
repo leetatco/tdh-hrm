@@ -9,7 +9,7 @@
 
 		<!-- 自定义按钮区域开始 -->
 		<view>
-			<el-row>				
+			<el-row>
 				<el-button type="primary" size="small" icon="el-icon-edit-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-export')" @click="exportExcelAll"> 导出全部
 				</el-button>
@@ -33,7 +33,7 @@
 		<vk-data-table ref="table1" :action="table1.action" :columns="table1.columns" :query-form-param="queryForm1"
 			:right-btns="table1.rightBtns" :data-preprocess="table1.dataPreprocess" :selection="true" :row-no="false"
 			:pagination="true" @update="updateBtn" @delete="deleteBtn" @current-change="currentChange"
-			@selection-change="selectionChange"></vk-data-table>
+			@selection-change="selectionChange" :page-sizes="pageSizes"></vk-data-table>
 		<!-- 表格组件结束 -->
 
 		<!-- 添加或编辑的弹窗开始 -->
@@ -70,6 +70,7 @@
 		data() {
 			// 页面数据变量
 			return {
+				pageSizes: [1, 5, 10, 20, 50, 100, 500, 1000],
 				nowym: '',
 				// 页面是否请求中或加载中
 				loading: false,
@@ -278,33 +279,10 @@
 							"width": colWidth - 100
 						},
 						{
-							key: "enable_hr",
-							title: "考勤审核",
-							type: "switch",
-							activeValue: true,
-							inactiveValue: false,
-							width: colWidth - 100,
-							watch: (res) => {
-								let {
-									value,
-									row,
-									change
-								} = res;
-								vk.callFunction({
-									url: "admin/hrm/attendance/sys/approve/update",
-									title: value ? "通过中..." : "未通过中...",
-									data: {
-										_id: row._id,
-										attendance_ym: row.attendance_ym,
-										card: row.card,
-										department_name: row.department_name,
-										enable_hr: value
-									},
-									success: data => {
-										this.refresh();
-									}
-								});
-							}
+							"key": "enable_hr",
+							"title": "考勤审核",
+							"type": "switch",
+							"width": colWidth - 50
 						},
 						{
 							"key": "comment",

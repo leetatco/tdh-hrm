@@ -94,20 +94,20 @@
 					// 表格字段显示规则
 					columns: [{
 							"key": "total_salary",
-							"title": "综合工资",
+							"title": "综合",
 							"type": "number",
 							"width": colWidth - 100
 						},
-						// {
-						// 	"key": "rest_type",
-						// 	"title": "休息类型",
-						// 	"type": "number",
-						// 	formatter: (val, row, column, index) => {
-						// 		if (val == 1) return '单休';
-						// 		if (val == 2) return '双休';
-						// 		if (val == 3) return '大小周';
-						// 	}
-						// },
+						{
+							"key": "rest_type",
+							"title": "制",
+							"type": "number",
+							formatter: (val, row, column, index) => {
+								if (val == 1) return '单';
+								if (val == 2) return '双';
+								if (val == 3) return '大小周';
+							}
+						},
 						{
 							"key": "base_salary",
 							"title": "基本工资",
@@ -155,7 +155,7 @@
 							"title": "保密费",
 							"type": "number",
 							"width": colWidth - 100
-						},
+						},						
 						{
 							"key": "update_date",
 							"title": "更新时间",
@@ -187,7 +187,7 @@
 					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
 					columns: [{
 							"key": "total_salary",
-							"title": "综合工资",
+							"title": "综合",
 							"type": "number",
 							"width": colWidth,
 							"mode": "="
@@ -213,27 +213,24 @@
 						// 表单字段显示规则
 						columns: [{
 								"key": "total_salary",
-								"title": "综合工资",
+								"title": "综合",
 								"precision": 0,
 								"type": "number",
 								"width": colWidth
 							},
-							// {
-							// 	"key": "rest_type",
-							// 	"title": "休息类型",
-							// 	"type": "select",
-							// 	"width": colWidth,
-							// 	"data": [{
-							// 		"value": 1,
-							// 		"label": "单休"
-							// 	}, {
-							// 		"value": 2,
-							// 		"label": "双休"
-							// 	}, {
-							// 		"value": 3,
-							// 		"label": "大小周"
-							// 	}]
-							// },
+							{
+								"key": "rest_type",
+								"title": "制",
+								"type": "select",
+								"width": colWidth,
+								"data": [{
+									"value": 1,
+									"label": "单"
+								}, {
+									"value": 2,
+									"label": "双"
+								}]
+							},
 							{
 								"key": "base_salary",
 								"title": "基本工资",
@@ -297,11 +294,11 @@
 								message: "该项不能为空",
 								trigger: ['blur', 'change']
 							}],
-							// rest_type: [{
-							// 	required: true,
-							// 	message: "该项不能为空",
-							// 	trigger: ['blur', 'change']
-							// }],
+							rest_type: [{
+								required: true,
+								message: "该项不能为空",
+								trigger: ['blur', 'change']
+							}],
 							base_salary: [{
 								required: true,
 								message: "该项不能为空",
@@ -486,13 +483,13 @@
 				//定义字段即将导入的excel表中的数据显示在el-table中，这些字段是显示的部分（同时需要将导入的数据传给后端）
 				let typeObj = {
 					total_salary: {
-						"title": "综合工资",
+						"title": "综合",
 						"type": "number"
 					},
-					// rest_type: {
-					// 	"title": "休息类型 1：单休 2：双休 3：大小周",
-					// 	"type": "number"
-					// },
+					rest_type: {
+						"title": "制",
+						"type": "text"
+					},
 					base_salary: {
 						"title": "基本工资",
 						"type": "number"
@@ -504,11 +501,7 @@
 					overtime_fee: {
 						"title": "固定加班",
 						"type": "number"
-					},
-					overtime_fee: {
-						"title": "固定加班",
-						"type": "number"
-					},
+					},					
 					penalty_fund: {
 						"title": "社保补偿金",
 						"type": "number"
@@ -537,17 +530,22 @@
 						for (const item of res) {
 							console.log("item:", item);
 							if (vk.pubfn.isNull(item.total_salary)) {
-								vk.alert('综合工资不能为空');
+								vk.alert('综合不能为空');
 								break;
 							}
+							
+							item.rest_type = item.rest_type == '单' ? 1 : 2;
+							
 							let delRes = await vk.callFunction({
 								url: 'admin/hrm/salary/sys/refer/delete',
 								title: '请求中...',
 								data: {
-									total_salary: item.total_salary
+									total_salary: item.total_salary,
+									rest_type:item.rest_type
 								},
 							})
-							if (delRes.code == 0) {
+							if (delRes.code == 0) {							
+
 								let addRes = await vk.callFunction({
 									url: 'admin/hrm/salary/sys/refer/add',
 									title: '请求中...',
@@ -562,7 +560,7 @@
 								}
 							}
 						}
-						this.fileList = [];
+
 						if (count == 0) {
 							vk.alert(`错误数据:${errorRow}`, "导入Excel失败", "确定", () => {});
 						} else {
@@ -574,7 +572,9 @@
 					});
 				} catch (error) {
 					console.log(error);
-				} finally {}
+				} finally {
+					this.fileList = [];
+				}
 			},
 			// 导入xls表格文件模版
 			exportExcelModel() {
@@ -583,14 +583,14 @@
 					title: "正在导出数据...",
 					columns: [{
 							"key": "total_salary",
-							"title": "综合工资",
+							"title": "综合",
 							"type": "number"
 						},
-						// {
-						// 	"key": "rest_type",
-						// 	"title": "休息类型 1：单休 2：双休 3：大小周",
-						// 	"type": "number"
-						// },
+						{
+							"key": "rest_type",
+							"title": "制",
+							"type": "number"
+						},
 						{
 							"key": "base_salary",
 							"title": "基本工资",
@@ -599,11 +599,6 @@
 						{
 							"key": "performance_salary",
 							"title": "绩效工资",
-							"type": "number"
-						},
-						{
-							"key": "overtime_fee",
-							"title": "固定加班",
 							"type": "number"
 						},
 						{
@@ -627,13 +622,13 @@
 							"type": "number"
 						},
 						{
-							"key": "confidentiality_fee",
-							"title": "保密费",
+							"key": "floating_bonus",
+							"title": "浮动奖励",
 							"type": "number"
 						},
 						{
-							"key": "floating_bonus",
-							"title": "浮动奖励",
+							"key": "confidentiality_fee",
+							"title": "保密费",
 							"type": "number"
 						}
 					],
@@ -648,19 +643,19 @@
 					title: "正在导出数据...",
 					columns: [{
 							"key": "total_salary",
-							"title": "综合工资",
+							"title": "综合",
 							"type": "number"
 						},
-						// {
-						// 	"key": "rest_type",
-						// 	"title": "休息类型",
-						// 	"type": "number",
-						// 	formatter: (val, row, column, index) => {
-						// 		if (val == 1) return '单休';
-						// 		if (val == 2) return '双休';
-						// 		if (val == 3) return '大小周';
-						// 	}
-						// },
+						{
+							"key": "rest_type",
+							"title": "制",
+							"type": "number",
+							formatter: (val, row, column, index) => {
+								if (val == 1) return '单休';
+								if (val == 2) return '双休';
+								if (val == 3) return '大小周';
+							}
+						},
 						{
 							"key": "base_salary",
 							"title": "基本工资",
@@ -675,12 +670,7 @@
 							"key": "overtime_fee",
 							"title": "固定加班",
 							"type": "number"
-						},
-						{
-							"key": "overtime_fee",
-							"title": "固定加班",
-							"type": "number"
-						},
+						},						
 						{
 							"key": "penalty_fund",
 							"title": "社保补偿金",

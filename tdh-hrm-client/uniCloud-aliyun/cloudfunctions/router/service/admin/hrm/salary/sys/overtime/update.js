@@ -17,6 +17,7 @@ module.exports = {
 		let {
 			_id,
 			employee_id,
+			card,
 			overtime_cost,
 			comment,
 			update_date,
@@ -34,6 +35,7 @@ module.exports = {
 			id:_id,
 			dataJson:{
 				employee_id,
+				card,
 				overtime_cost,
 				comment,
 				update_id: uid,

@@ -27,7 +27,8 @@ module.exports = {
 			$
 		} = util;
 		let {
-			uid
+			uid,
+			attendance_ym
 		} = data;
 		let res = {
 			code: 0,
@@ -36,52 +37,32 @@ module.exports = {
 		// 业务逻辑开始-----------------------------------------------------------
 		let dbName = "hrm-salary"; // 表名		
 
-		let resTotal = await vk.baseDao.getTableData({
+		res = await vk.baseDao.getTableData({
 			dbName,
-			data,			
+			whereJson: {
+				attendance_ym
+			},
 			groupJson: {
 				_id: "$attendance_ym", // 以 attendance_ym 作为分组字段				
 				work_days: $.sum('$work_days'),
 				real_days: $.sum('$real_days'),
 				gross_salary: $.sum('$gross_salary'),
 				overtime_cost: $.sum('$overtime_cost'),
-				free_cost: $.sum('$free_cost'),				
-				grant: $.sum('$grant'),				
-				agency_fee: $.sum('$agency_fee'),				
-				other_cost: $.sum('$other_cost'),				
-				we_cost: $.sum('$we_cost'),				
-				clothes_cost: $.sum('$clothes_cost'),				
-				earlytime_cost: $.sum('$earlytime_cost'),				
-				missed_cost: $.sum('$missed_cost'),				
-				loan_cost: $.sum('$loan_cost'),				
-				this_month_sb: $.sum('$this_month_sb'),				
-				this_month_dk: $.sum('$this_month_dk'),				
-				dkgs: $.sum('$dkgs'),				
+				free_cost: $.sum('$free_cost'),
+				grant: $.sum('$grant'),
+				agency_fee: $.sum('$agency_fee'),
+				other_cost: $.sum('$other_cost'),
+				we_cost: $.sum('$we_cost'),
+				clothes_cost: $.sum('$clothes_cost'),
+				earlytime_cost: $.sum('$earlytime_cost'),
+				missed_cost: $.sum('$missed_cost'),
+				loan_cost: $.sum('$loan_cost'),
+				this_month_sb: $.sum('$this_month_sb'),
+				this_month_dk: $.sum('$this_month_dk'),
+				dkgs: $.sum('$dkgs'),
 				real_salary: $.sum('$real_salary'),
 			}
 		});
-
-		res = await vk.baseDao.getTableData({
-			dbName,
-			data,			
-			sortArr: [{
-				name: "attendance_ym",
-				type: "asc"
-			}, {
-				name: "_id",
-				type: "asc"
-			}],
-			// 副表
-			foreignDB: [{
-				dbName: "uni-id-users",
-				localKey: "update_id",
-				foreignKey: "_id",
-				as: "users",
-				limit: 1
-			}]
-		});
-
-		res.totalSummary = resTotal.rows[0];
 		return res;
 	}
 

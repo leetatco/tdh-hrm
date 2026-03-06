@@ -27,8 +27,7 @@ module.exports = {
 		} = util;
 		let {
 			uid,
-			attendance_ym,
-			enable_hr
+			attendance_ym
 		} = data;
 		let res = {
 			code: 0,
@@ -36,12 +35,11 @@ module.exports = {
 		};
 
 		// 业务逻辑开始-----------------------------------------------------------
-		let dbName = "hrm-attendance-approve"; // 表名
+		let dbName = "hrm-salary"; // 表名
 
 		// 构建查询条件（保持不变）
 		let whereJson = {
-			attendance_ym,
-			enable_hr
+			attendance_ym
 		};
 
 		let sortArr = [{
@@ -54,16 +52,11 @@ module.exports = {
 
 		// 副表关联配置（保持不变）
 		let foreignDB = [{
-			dbName: "hrm-salary-employees",
+			dbName: "hrm-attendance-approve",
 			localKey: "card",
 			foreignKey: "card",
-			as: "salarys",
-			limit: 1
-		}, {
-			dbName: "uni-id-users",
-			localKey: "update_id",
-			foreignKey: "_id",
-			as: "users",
+			as: "attendances",
+			whereJson,
 			limit: 1
 		}];
 

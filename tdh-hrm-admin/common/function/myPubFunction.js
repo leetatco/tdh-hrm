@@ -314,14 +314,19 @@ myfn.parseSalary = (str) => {
 
 // 处理工资月份格式
 myfn.toFormatDate = (input) => {
-	// 按小数点分割
-	const [year, month] = input.split('.');
-	// 补全年份为四位（假设都是2000年以后）
+	// 使用正则表达式匹配两位年份、小数点、一到两位月份
+	const match = input.match(/(\d{2})\.(\d{1,2})/);
+	if (!match) {
+		// 如果无法匹配，可根据实际需求返回原字符串或抛出错误
+		return input;
+	}
+	const year = match[1];
+	const month = match[2];
+	// 补全年份为四位（假设2000年以后），月份补零到两位
 	const fullYear = '20' + year.padStart(2, '0');
-	// 月份补零到两位
 	const fullMonth = month.padStart(2, '0');
 	return `${fullYear}-${fullMonth}`;
-}
+};
 
 
 export default myfn;

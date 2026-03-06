@@ -11,7 +11,10 @@
 		<view>
 			<el-row>
 				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
-					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>				
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')"
+					@click="autoBtn">自动生成定薪表</el-button>
+				<el-button type="success" size="small" icon="el-icon-circle-plus-outline"
+					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="addBtn">添加</el-button>
 				<el-button type="primary" size="small" icon="el-icon-edit-outline"
 					v-if="$hasRole('admin') || $hasPermission('hrm-salary-config-add')" @click="exportExcelAll"> 导出全部
 				</el-button>
@@ -333,13 +336,13 @@
 								"type": "radio",
 								"width": colWidth,
 								"data": [{
-									"value": "1",
+									"value": 1,
 									"label": "月薪"
 								}, {
-									"value": "2",
+									"value": 2,
 									"label": "日薪"
 								}, {
-									"value": "3",
+									"value": 3,
 									"label": "时薪"
 								}]
 							},
@@ -518,7 +521,95 @@
 						_id: item._id
 					},
 				});
-			},			
+			},
+			//自动生成考勤数据			
+			async autoBtn() {
+				vk.prompt("请输入考勤日期", "注意日期格式YYYY-MM", "确定", "取消", (res) => {
+					if (res.confirm) {
+						if (vk.pubfn.isNull(res.content)) {
+							return vk.alert('考勤日期不能为空！');
+						}
+						const attendance_ym = res.content;
+						vk.confirm(`确定将删除全部数据，重新生成定薪表数据！`, '提示', '确定', '取消', async (res) => {
+							if (res.confirm) {
+								try {
+									// 1. 先获取所有定薪表数据
+									let resDetails = await vk.callFunction({
+										url: 'admin/hrm/salary/pub/getEmployeeList',
+										title: '请求中...',
+										data: {
+											attendance_ym: attendance_ym
+										},
+									});
+
+									if (resDetails.total == 0) {
+										return vk.alert(`没有${attendance_ym}薪资表明细！`);
+									}
+
+									// 2. 提取所有员工工号
+									const empCards = resDetails.rows.map(item => item.card).filter(
+										card =>
+										card);
+
+									// 3.删除旧数据
+									let delRes = await vk.callFunction({
+										url: 'admin/hrm/salary/sys/employees/deleteAll',
+										title: '删除中...',
+										data: {
+											cards: empCards
+										}
+									})
+
+									if (delRes.code != 0) {
+										return vk.alert(`员工定薪明细删除失败！`);
+									}
+
+
+									// 7. 批量处理数据
+									const validData = [];
+									const seenCards = new Set();
+									resDetails.rows.forEach((item) => {
+									    if (vk.pubfn.isNotNull(item.attendances)) {
+									        const card = item.card;
+									        if (!seenCards.has(card)) {     
+									            seenCards.add(card);        
+									            validData.push({
+									                card: card,
+									                salary: item.total_salary,
+									                salary_type: item.attendances.salary_type
+									            });
+									        }
+									    }
+									});
+
+									vk.toast('开始导入数据...');
+									const result = await vk.callFunction({
+										url: 'admin/hrm/salary/sys/employees/addAll',
+										title: '请求中...',
+										data: {
+											items: validData
+										},
+									});
+
+									if (result.code === 0) {
+										let resultMessage = `导入完成！成功: ${result.id.length}条`;
+										vk.alert(resultMessage, "导入成功", "确定", () => {
+											this.refresh();
+										})
+									} else {
+										vk.alert(`导入数据失败!`, "系统错误", "确定");
+									}
+
+								} catch (error) {
+									console.error('处理过程中发生错误:', error);
+									vk.alert(`处理过程中发生错误: ${error.message}`, "系统错误", "确定");
+								}
+							}
+						});
+
+					}
+				}, nowym);
+			},
 
 			//导入xls表格文件
 			handleChange(file) {
@@ -530,7 +621,7 @@
 					},
 					salary_type: {
 						"title": "工资类型",
-						"type": "text"
+						"type": "number"
 					},
 					salary: {
 						"title": "综合工资",
@@ -616,9 +707,9 @@
 							}
 
 							if (item.salary_type === "月薪") {
-								item.salary_type = "1";
+								item.salary_type = 1;
 							} else {
-								item.salary_type === "日薪" ? "2" : "3";
+								item.salary_type === "日薪" ? 2 : 3;
 							}
 
 							//修改新增人员和时间									
@@ -684,6 +775,7 @@
 				} catch (error) {
 					console.error('导入Excel失败:', error);
 					vk.alert(`导入Excel失败: ${error.message}`, "系统错误", "确定");
+				} finally {
 					this.fileList = [];
 				}
 
@@ -701,11 +793,11 @@
 						{
 							"key": "salary_type",
 							"title": "工资类型",
-							"type": "text",
+							"type": "number",
 							formatter: function(val, row, column, index) {
-								if (row.salary_type == "1") return '月薪';
-								if (row.salary_type == "2") return '日薪';
-								if (row.salary_type == "3") return '时薪';
+								if (row.salary_type == 1) return '月薪';
+								if (row.salary_type == 2) return '日薪';
+								if (row.salary_type == 3) return '时薪';
 							}
 						},
 						{

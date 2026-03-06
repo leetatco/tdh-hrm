@@ -48,11 +48,8 @@ module.exports = {
 				name: "attendance_ym",
 				type: "asc"
 			}, {
-				name: "card",
+				name: "_id",
 				type: "asc"
-			}, {
-				name: "department_name",
-				type: "desc"
 			}],
 			// 副表
 			foreignDB: [{

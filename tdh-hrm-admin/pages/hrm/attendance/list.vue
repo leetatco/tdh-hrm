@@ -10,9 +10,6 @@
 		<!-- 自定义按钮区域开始 -->
 		<view>
 			<el-row>
-				<el-button type="primary" size="small" icon="el-icon-edit-outline"
-					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-export')" @click="exportExcelAll"> 导出全部
-				</el-button>
 				<!-- <el-button type="success" size="small" icon="el-icon-circle-plus-outline"
 					v-if="$hasRole('admin') || $hasRole('hr-add')" @click="importMonthDatas"> 读入月考勤数据
 				</el-button> -->
@@ -21,8 +18,14 @@
 					:show-file-list="false" :on-change="handleChange" :file-list="fileList" action="">
 					<el-button type="success" size="small" icon="el-icon-upload2">导入excel</el-button>
 				</el-upload>
+				<el-button type="primary" size="small" icon="el-icon-edit-outline"
+					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-export')" @click="exportExcelAll"> 导出全部
+				</el-button>
 				<el-button type="primary" size="small" icon="el-icon-tickets" @click="exportExcelModel"
 					v-if="$hasRole('admin') || $hasPermission('hrm-attendance-add')"> 下载模版
+				</el-button>				
+				<el-button type="danger" size="small" icon="el-icon-delete" @click="deleteAll"
+					v-if="$hasRole('admin')"> 删除考勤日期数据
 				</el-button>
 			</el-row>
 		</view>
@@ -31,7 +34,7 @@
 		<!-- 表格组件开始 -->
 		<vk-data-table ref="table1" :action="table1.action" :columns="table1.columns" :query-form-param="queryForm1"
 			:row-no="false" :pagination="true" @current-change="currentChange" :selection="true"
-			@selection-change="selectionChange"></vk-data-table>
+			@selection-change="selectionChange" :page-sizes="pageSizes"></vk-data-table>
 		<!-- 表格组件结束 -->
 
 		<!-- 添加或编辑的弹窗开始 -->
@@ -67,6 +70,7 @@
 		data() {
 			// 页面数据变量
 			return {
+				pageSizes: [1, 5, 10, 20, 50, 100, 500, 1000],
 				fileList: [],
 				// 页面是否请求中或加载中
 				loading: false,
@@ -495,6 +499,32 @@
 			selectionChange(list) {
 				this.table1.multipleSelection = list;
 			},
+			//删除导入的数据
+			async deleteAll() {
+				try {
+					if (vk.pubfn.isNull(this.queryForm1.formData.attendance_ym)) {
+						return vk.alert(`考勤日期不能为空！`);
+					}
+					const attendance_ym = this.queryForm1.formData.attendance_ym;
+					// 删除旧数据
+					let delRes = await vk.callFunction({
+						url: 'admin/hrm/attendance/sys/all/deleteDetailAll',
+						title: '删除中...',
+						data: {
+							attendance_ym: attendance_ym
+						}
+					})
+
+					if (delRes.code != 0) {
+						return vk.alert(`${attendance_ym}月考勤明细删除失败！`);
+					}
+					return vk.alert(`${attendance_ym}月考勤明细删除成功！`);
+				} catch (err) {
+
+				} finally {
+					this.refresh();
+				}
+			},
 			//导入xls表格文件
 			async handleChange(file) {
 				// 定义字段类型
@@ -567,6 +597,13 @@
 				};
 
 				try {
+
+					if (vk.pubfn.isNull(this.queryForm1.formData.attendance_ym)) {
+						return vk.alert(`考勤日期不能为空！`);
+					}
+
+					const attendance_ym = this.queryForm1.formData.attendance_ym;
+
 					this.$iexcel.importExcel(file.raw, typeObj, async (res) => {
 						if (!res || res.length === 0) {
 							return vk.alert('Excel中没有数据！');
@@ -577,12 +614,12 @@
 							url: 'admin/hrm/attendance/sys/all/deleteDetailAll',
 							title: '删除中...',
 							data: {
-								attendance_ym: nowym
+								attendance_ym: attendance_ym
 							}
 						})
 
 						if (delRes.code != 0) {
-							return vk.alert(`${nowym}月考勤明细删除失败！`);
+							return vk.alert(`${attendance_ym}月考勤明细删除失败！`);
 						}
 
 						// 1. 数据验证
@@ -628,7 +665,7 @@
 
 						for (const item of res) {
 
-							item.attendance_ym = nowym
+							item.attendance_ym = attendance_ym
 
 							// 验证必要字段
 							if (!item.attendance_ym) {
@@ -703,6 +740,7 @@
 				} catch (error) {
 					console.error('导入Excel失败:', error);
 					vk.alert(`导入Excel失败: ${error.message}`, "系统错误", "确定");
+				} finally {
 					this.fileList = [];
 				}
 			},
@@ -876,8 +914,12 @@
 			},
 			// 导出xls表格文件（全部数据）
 			exportExcelAll() {
+				if (vk.pubfn.isNull(this.queryForm1.formData.attendance_ym)) {
+					return vk.alert(`考勤日期不能为空！`);
+				}
+				const attendance_ym = this.queryForm1.formData.attendance_ym;
 				this.$refs.table1.exportExcel({
-					fileName: nowym + '员工考勤信息',
+					fileName: attendance_ym + '员工考勤信息',
 					title: "正在导出数据...",
 					columns: [{
 							"key": "attendance_ym",

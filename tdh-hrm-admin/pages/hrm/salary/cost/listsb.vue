@@ -276,7 +276,7 @@
 								title: "姓名",
 								type: "table-select",
 								placeholder: "选择员工",
-								action: "admin/hrm/attendance/sys/getList",								
+								action: "admin/hrm/attendance/sys/getList",
 								multiple: false,
 								columns: [{
 										key: "employee_name",
@@ -465,7 +465,7 @@
 					attendance_ym: {
 						"title": "考勤日期",
 						"type": "text"
-					},					
+					},
 					card: {
 						"title": "身份证号码",
 						"type": "text"
@@ -625,6 +625,7 @@
 				} catch (error) {
 					console.error('导入Excel失败:', error);
 					vk.alert(`导入Excel失败: ${error.message}`, "系统错误", "确定");
+				} finally {
 					this.fileList = [];
 				}
 			},
@@ -686,7 +687,7 @@
 							"key": "attendance_ym",
 							"title": "考勤日期",
 							"type": "text"
-						}, 
+						},
 						{
 							"key": "employees.employee_name",
 							"title": "员工姓名",

@@ -38,7 +38,7 @@
 		<vk-data-table ref="table1" :action="table1.action" :columns="table1.columns" :query-form-param="queryForm1"
 			:right-btns="table1.rightBtns" :data-preprocess="table1.dataPreprocess" :selection="true" :row-no="false"
 			:pagination="true" @update="updateBtn" @delete="deleteBtn" @current-change="currentChange"
-			@selection-change="selectionChange"></vk-data-table>
+			@selection-change="selectionChange" :page-sizes="pageSizes"></vk-data-table>
 		<!-- 表格组件结束 -->
 
 		<!-- 添加或编辑的弹窗开始 -->
@@ -75,6 +75,7 @@
 		data() {
 			// 页面数据变量
 			return {
+				pageSizes: [1, 5, 10, 20, 50, 100, 500, 1000],
 				nowym: '',
 				// 页面是否请求中或加载中
 				loading: false,
@@ -968,7 +969,12 @@
 			},
 			//自动生成考勤数据			
 			async autoBtn() {
-				vk.confirm(`确定将删除${nowym}月全部数据，重新生成考勤表数据！`, '提示', '确定', '取消', async (res) => {
+				if (vk.pubfn.isNull(this.queryForm1.formData.attendance_ym)) {
+					return vk.alert(`考勤日期不能为空！`);
+				}
+				const attendance_ym = this.queryForm1.formData.attendance_ym;
+
+				vk.confirm(`确定将删除${attendance_ym}月全部数据，重新生成考勤表数据！`, '提示', '确定', '取消', async (res) => {
 					if (res.confirm) {
 						try {
 							// 1. 先获取所有考勤明细数据
@@ -976,12 +982,12 @@
 								url: 'admin/hrm/attendance/sys/all/getListAll',
 								title: '请求中...',
 								data: {
-									attendance_ym: nowym
+									attendance_ym: attendance_ym
 								},
 							});
 
 							if (resDetails.total == 0) {
-								return vk.alert(`没有${nowym}月考勤明细！`);
+								return vk.alert(`没有${attendance_ym}月考勤明细！`);
 							}
 
 							// 2. 删除旧数据
@@ -989,12 +995,12 @@
 								url: 'admin/hrm/attendance/sys/all/deleteAproAll',
 								title: '请求中...',
 								data: {
-									attendance_ym: nowym
+									attendance_ym: attendance_ym
 								}
 							})
 
 							if (delRes.code != 0) {
-								return vk.alert(`${nowym}月考勤明细删除失败！`);
+								return vk.alert(`${attendance_ym}月考勤明细删除失败！`);
 							}
 
 							// 3. 提取所有员工card和可能的attendance_ym_key
@@ -1013,16 +1019,10 @@
 								// 计算attendance_ym_key
 								let attendance_ym_key;
 								if (vk.pubfn.isNotNull(row.resign_month)) {
-									if (nowym.split('-')[1] != row.resign_month) {
-										let rm = row.resign_month > 9 ? row.resign_month :
-											`0${row.resign_month}`;
-										attendance_ym_key = `${nowy}-${rm}`;
-									} else {
-										attendance_ym_key = row.attendance_ym;
-									}
+									attendance_ym_key = vk.myfn.toFormatDate(row.resign_date);
 								} else {
 									attendance_ym_key = row.attendance_ym;
-								}
+								}							
 
 								row.attendance_ym_key = attendance_ym_key;
 

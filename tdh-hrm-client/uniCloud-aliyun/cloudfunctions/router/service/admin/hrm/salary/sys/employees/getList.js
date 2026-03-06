@@ -34,9 +34,14 @@ module.exports = {
 		};
 		// 业务逻辑开始-----------------------------------------------------------
 		let dbName = "hrm-salary-employees"; // 表名
+		let sortArr = [{
+					name: "_id",
+					type: "asc"
+				}];
 		res = await vk.baseDao.getTableData({
 			dbName,
 			data,
+			sortArr,
 			// 副表
 			foreignDB: [{
 				dbName: "hrm-attendance-detail",

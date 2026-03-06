@@ -14,7 +14,7 @@ module.exports = {
 		let res = { code: 0, msg: 'ok' };
 		// 业务逻辑开始-----------------------------------------------------------
 		// 获取前端传过来的参数
-		let { _id, total_salary} = data;
+		let { _id, total_salary,rest_type} = data;
 		// 参数验证开始
 		if (vk.pubfn.isNull(_id) && vk.pubfn.isNull(total_salary)) return {
 					code: -1,
@@ -32,7 +32,8 @@ module.exports = {
 			await vk.baseDao.del({
 			dbName,
 			whereJson:{
-				total_salary
+				total_salary,
+				rest_type
 			}
 		})
 		}		
